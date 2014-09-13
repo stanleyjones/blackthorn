@@ -4,9 +4,11 @@
 
 var express = require('express'),
 	bodyParser = require('body-parser'),
+	cookieParser = require('cookie-parser'),
 	app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 // DATABASE
 
@@ -33,6 +35,25 @@ var	users = require('./api/routes/users'),
 // }));
 
 function isAdmin (req, res, next) {
+	// [TODO] Check if user is admin
+	if (true) { return next(); }
+	res.redirect('/login');
+}
+
+function isMember (req, res, next) {
+	// [TODO] Check if user is GM or player
+	if (true) { return next(); }
+	res.redirect('/login');
+}
+
+function isGm (req, res, next) {
+	// [TODO] Check if user is GM
+	if (true) { return next(); }
+	res.redirect('/login');
+}
+
+function authenticated (req, res, next) {
+	// [TODO] Check if user is logged in
 	if (true) { return next(); }
 	res.redirect('/login');
 }
@@ -42,15 +63,26 @@ function isAdmin (req, res, next) {
 var router = express.Router();
 app.use('/api', router);
 
-router.get('/', function (req, res) { res.json({ status: 'API is running.' }); });
+// API : Unrestricted
+
+// [TODO] Test for and return user if logged in
+router.get('/', function (req, res) { res.json({ status: 'ok', cookies: req.cookies }); });
+router.post('/login', users.login);
+router.get('/login/:hash', users.loginHash);
+
+// API : Logged In
+
+router.get('/campaigns', authenticated, campaigns.all);
+
+// API : Members Only (GM/Player)
+
+router.get('/campaigns/:id', isMember, campaigns.one);
+
+// API : Admin Only
+
 router.get('/users', isAdmin, users.all);
 router.get('/users/:id', isAdmin, users.one);
 
-router.get('/campaigns', campaigns.all);
-router.get('/campaigns/:id', campaigns.one);
-
-router.post('/users/login', users.login); //function (req, res) { res.json({ status: true }); });
-router.get('/users/login/:hash', users.loginHash);
 
 // STATIC
 
@@ -69,9 +101,7 @@ console.log('Listening on port ' + port);
 // app.configure(function(){
 // 	app.use(express.favicon());
 // 	app.use(express.logger('dev'));
-// 	app.use(express.bodyParser());
 // 	app.use(express.methodOverride());
-// 	app.use(express.cookieParser('your secret here'));
 // 	app.use(express.session());
 // });
 

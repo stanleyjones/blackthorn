@@ -33,7 +33,7 @@ module.exports = Backbone.View.extend({
 		var login = this.$('.login').serialize();
 		this.$('.login').fadeOut();
 
-		$.post('/api/users/login', login)
+		$.post('/api/login', login)
 			.done(function (res) {
 				this.$('.alert-info').html(res.message).fadeIn();
 			})

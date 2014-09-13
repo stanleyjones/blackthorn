@@ -16,8 +16,8 @@ exports.sendHash = function (email, hash) {
 		to: email,
 		from: '[BLACKTHORN] <stanley.g.jones@gmail.com>',
 		subject: 'Your invite code',
-		text: 'Login here: http://localhost:9000/api/users/login/' + hash,
-		html: 'Login <a href="http://localhost:9000/api/users/login/' + hash + '">here</a>.'
+		text: 'Login here: http://localhost:9000/api/login/' + hash,
+		html: 'Login <a href="http://localhost:9000/api/login/' + hash + '">here</a>.'
 	};
 
 	transporter.sendMail(options, function (err, res) {
