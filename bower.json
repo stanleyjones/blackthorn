@@ -2,10 +2,9 @@
   "name": "blackthorn",
   "version": "0.0.1",
   "authors": [
-    "Stanley Jones <stanley@diligentcreative.com>"
+    "Stanley Jones <stanley@sunshocked.com>"
   ],
   "description": "A gaming dashboard for GURPS.",
-  "license": "MIT",
   "private": true,
   "ignore": [
     "**/.*",
@@ -14,17 +13,8 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "jquery": "~2.1.1",
-    "underscore": "~1.6.0",
-    "backbone": "~1.1.2",
-    "requirejs": "~2.1.5",
-    "requirejs-text": "~2.0.5",
-    "modernizr": "~2.8.3",
+  "devDependencies": {
     "bootstrap": "~3.2.0",
-    "mocha": "~1.20.1",
-    "chai": "~1.9.1",
-    "velocity": "~0.6.0",
     "font-awesome": "~4.1.0"
   }
 }
