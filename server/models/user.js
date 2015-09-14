@@ -13,4 +13,14 @@ userSchema.methods.generateHash = function (email) {
 	this.save();
 };
 
-module.exports = mongoose.model('User', userSchema);
+var User = mongoose.model('User', userSchema);
+
+exports.seed = function () {
+	User.find({}).exec(function (err, collection) {
+		if (!collection.length) {
+			User.create({
+				email: 'stanley@sunshocked.com'
+			});
+		}
+	});
+};
