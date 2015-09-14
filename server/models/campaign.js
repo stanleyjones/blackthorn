@@ -15,4 +15,4 @@ exports.seed = function () {
 			Campaign.create({ name: 'Seed Campaign 2' });
 		}
 	});
-}
+};

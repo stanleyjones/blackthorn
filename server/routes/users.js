@@ -52,3 +52,12 @@ exports.acceptInvite = function (req, res) {
 		}
 	});
 };
+
+// Used by client to validate user on initial bootup
+exports.login = function (req, res) {
+	console.log(req.cookies);
+	// [TODO] Use Passwordless to actually log in
+	var loggedIn = req.cookies.token && req.cookies.token === 'xyz';
+	if (loggedIn) { res.status(200).json({message: 'Logged in.'}); }
+	else { res.status(403).json({message: 'Unable to authenticate.'}); }
+};

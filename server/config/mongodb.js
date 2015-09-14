@@ -1,8 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-	User = require('../models/user'),
-	Campaign = require('../models/campaign');
+var mongoose = require('mongoose');
+
+require('../models/user');
+require('../models/campaign');
 
 module.exports = function (app) {
 

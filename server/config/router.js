@@ -18,6 +18,8 @@ module.exports = function (app) {
 	router.post('/invite', users.requestInvite);
 	router.get('/invite/:invite_code', users.acceptInvite);
 
+	router.get('/login', users.login);
+
 	// router.post('/invite', passwordless.requestToken(users.requestToken));
 	// router.get('/invite', passwordless.acceptToken({successRedirect: '/'}));
 

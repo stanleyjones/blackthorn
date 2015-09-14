@@ -6,7 +6,11 @@ var session = require('express-session'),
 
 module.exports = function (app) {
 
-	app.use(session({secret: 'bimbimbim'}));
+	app.use(session({
+		secret: 'bimbimbim',
+		resave: false,
+		saveUninitialized: false
+	}));
 	app.use(bodyParser.urlencoded({extended: true}));
 	app.use(cookieParser());
 

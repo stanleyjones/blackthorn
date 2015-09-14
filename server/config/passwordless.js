@@ -5,8 +5,7 @@ var passwordless = require('passwordless'),
 
 module.exports = function (app) {
 
-	var mongoDb = 'mongodb://localhost/blackthorn';
-	passwordless.init(new passwordStore(mongoDb));
+	passwordless.init(new passwordStore(app.env.db));
 	app.use(passwordless.sessionSupport());
 
 };
