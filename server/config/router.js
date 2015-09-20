@@ -2,6 +2,7 @@
 
 var	express = require('express'),
 	router = express.Router(),
+	passwordless = require('passwordless'),
 	auth = require('./auth'),
 	users = require('../routes/users'),
 	campaigns = require('../routes/campaigns');
@@ -13,19 +14,18 @@ module.exports = function (app) {
 // Unrestricted
 
 	// [TODO] Test for and return user if logged in
-	router.get('/', function (req, res) { res.json({ status: 'ok', cookies: req.cookies }); });
+	router.get('/', function (req, res) {
+		res.status(200).json({ cookies: req.cookies });
+	});
 
-	router.post('/invite', users.requestInvite);
-	router.get('/invite/:invite_code', users.acceptInvite);
+	router.post('/invite', passwordless.requestToken(users.email), users.invited);
+	router.get('/invite', users.accept);
 
 	router.get('/login', users.login);
 
-	// router.post('/invite', passwordless.requestToken(users.requestToken));
-	// router.get('/invite', passwordless.acceptToken({successRedirect: '/'}));
-
 // Logged In
 
-	router.get('/campaigns', auth.isUser, campaigns.all);
+	router.get('/campaigns', passwordless.restricted(), campaigns.all);
 
 // Members Only (GM/Player)
 

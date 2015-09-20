@@ -9,20 +9,20 @@ var mailer = require('nodemailer'),
 		}
 	});
 
-exports.sendHash = function (email, hash) {
-	console.log('sending invite code "' + hash + '" to ' + email);
+exports.sendInvite = function (token, uid, recipient, callback) {
+	console.log('sending invite code "' + token + '" to ' + uid);
 
 	var options = {
-		to: email,
+		to: recipient,
 		from: '[BLACKTHORN] <stanley.g.jones@gmail.com>',
 		subject: 'Your invite code',
-		text: 'Login here: http://localhost:9000/api/login/' + hash,
-		html: 'Login <a href="http://localhost:9000/api/login/' + hash + '">here</a>.'
+		text: 'Login here: http://localhost:9000/api/invite/?token=' + token + '&uid=' + uid
 	};
 
-	transporter.sendMail(options, function (err, res) {
-		if (err) { console.log(err); }
-		else { console.log('Message sent: ' + res.response); }
+	transporter.sendMail(options, function (err) {
+		if (err) { console.log(err); callback(err.message); }
+		else { callback(); }
 	});
 
+	callback();
 };
