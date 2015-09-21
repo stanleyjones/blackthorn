@@ -9,5 +9,5 @@ module.exports = function (app) {
 	passwordless.init(new passwordStore(app.env.db));
 	passwordless.addDelivery(mail.sendInvite);
 	app.use(passwordless.sessionSupport());
-	app.use(passwordless.acceptToken({allowPost: true}));
+	app.use(passwordless.acceptToken({successRedirect: '/'}));
 };
