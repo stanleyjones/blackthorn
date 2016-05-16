@@ -1,2 +1,5 @@
-import projectName from './main';
-console.log(`This is ${projectName}!`);
+/**
+ * Main entry point
+ */
+
+window.console.log('loaded');
