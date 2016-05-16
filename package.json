@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "prestart": "npm run build"
+    "prestart": "npm run build",
+    "start": "node server"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
