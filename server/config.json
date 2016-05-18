@@ -1,0 +1,7 @@
+{
+  "development": {
+    "db": "mongodb://localhost/blackthorn",
+    "host": "http://localhost",
+    "port": 9000
+  }
+}

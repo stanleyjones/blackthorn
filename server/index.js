@@ -1,15 +1,18 @@
-const app = require('express')();
-const env = process.env.NODE_ENV || 'development';
+import express from 'express';
 
-// Config
+import config from './config.json';
+import useExpress from './express';
+import useGraphQL from './graphql';
 
-app.env = require('./config/app')[env];
+const app = express();
+app.env = config[process.env.NODE_ENV || 'development'];
 
-require('./config/express')(app);
-require('./config/mongodb')(app);
-require('./config/passwordless')(app);
-require('./config/router')(app);
-require('./config/static')(app);
+useExpress(app);
+useGraphQL(app);
+
+// require('./config/mongodb')(app);
+// require('./config/passwordless')(app);
+// require('./config/router')(app);
 
 app.listen(app.env.port);
-console.log('listening:', [app.env.host, app.env.port].join(':'));
+console.log(`listening: ${app.env.host}:${app.env.port}`);
