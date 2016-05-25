@@ -1,8 +1,5 @@
 import mongoose from 'mongoose';
 
-// import User from '../models/user';
-// require('../models/campaign');
-
 export default (app) => {
   const db = mongoose.connection;
 

@@ -6,5 +6,7 @@ export default new GraphQLObjectType({
     _id: { type: GraphQLString },
     admin: { type: GraphQLBoolean },
     email: { type: GraphQLString },
+    name: { type: GraphQLString },
+    token: { type: GraphQLString },
   },
 });

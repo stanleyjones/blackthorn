@@ -5,38 +5,41 @@ import {
   GraphQLSchema,
   GraphQLString,
 } from 'graphql';
+import { sign } from 'jsonwebtoken';
 
+import { SECRET } from '../constants';
 import userType from './userType';
-import Users from '../models/user';
+import User from '../models/user';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
-    fields: () => ({
-      users: {
+    fields: {
+      user: {
         type: new GraphQLList(userType),
-        resolve: () => Users.find(),
+        resolve: () => User.find(),
       },
       user: {
         type: userType,
         args: {
-          admin: { type: GraphQLBoolean },
           email: { type: GraphQLString },
         },
-        resolve: (_, args) => Users.findOne(args),
+        resolve: (_, args) => User.findOne(args),
       },
-    }),
+    },
   }),
   mutation: new GraphQLObjectType({
     name: 'RootMutationType',
     fields: {
-      changeName: {
+      auth: {
         type: userType,
         args: {
-          id: { type: GraphQLString },
-          name: { type: GraphQLString },
+          email: { type: GraphQLString },
+          admin: { type: GraphQLBoolean },
         },
-        resolve: () => {},
+        resolve: (_, args) => User.findOneAndUpdate(args, {
+          token: sign(args, SECRET)
+        }, { new: true }),
       },
     },
   }),

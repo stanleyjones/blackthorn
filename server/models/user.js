@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   admin: Boolean,
   email: String,
   hash: String,
+  token: String,
 });
 
 userSchema.methods.generateHash = (email) => {
