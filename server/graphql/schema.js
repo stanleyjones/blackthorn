@@ -38,7 +38,7 @@ export default new GraphQLSchema({
           admin: { type: GraphQLBoolean },
         },
         resolve: (_, args) => User.findOneAndUpdate(args, {
-          token: sign(args, SECRET)
+          token: sign(args, SECRET),
         }, { new: true }),
       },
     },
