@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --colors --watch &",
     "prestart": "npm run build",
     "seed": "node ./bin/seed_database",
     "start": "nodemon server --exec babel-node"
@@ -38,7 +38,26 @@
     "eslint-plugin-jsx-a11y": "^1.2.0",
     "eslint-plugin-react": "^5.1.1",
     "mongodb": "^2.1.19",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.2",
+    "react-router": "^3.0.2",
+    "redux": "^3.6.0",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react",
+      "stage-2"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "airbnb",
+    "parser": "babel-eslint",
+    "rules": {
+      "no-console": 0
+    }
   }
 }

@@ -2,6 +2,7 @@
 import express from 'express';
 // import session from 'express-session';
 // import { urlencoded } from 'body-parser';
+import path from 'path';
 
 export default function (app) {
   // app.use(session({
@@ -13,6 +14,8 @@ export default function (app) {
   // app.use(urlencoded({ extended: true }));
   // app.use(cookieParser());
 
-  app.use(express.static('public'));
-  app.get('*', (req, res) => { res.sendFile(`${__dirname}/public/index.html`); });
+  app.get(/.*\.js/, express.static('public'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../../public/index.html'));
+  });
 }
