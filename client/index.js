@@ -1,23 +1,13 @@
 import React from 'react';
+import { applyMiddleware, createStore } from 'redux';
 import { render } from 'react-dom';
-import { Route, Router, browserHistory } from 'react-router';
 
-const logIn = () => <div>Log In</div>;
-const logOut = () => <div>Log Out</div>;
-const campaigns = () => <div>Campaigns</div>;
-const notFound = () => <div>404</div>;
+import Root from './root';
+import root from './reducer';
+import { logger, thunk } from './middleware';
+import { fetchUser } from './user';
 
-const isLoggedIn = () => false;
+const store = createStore(root, applyMiddleware(logger, thunk));
+store.dispatch(fetchUser());
 
-const authenticate = (nextState, replace) => {
-  if (!isLoggedIn()) { replace({ pathname: '/login' }); }
-}
-
-render((
-  <Router history={browserHistory}>
-    <Route path="/login" component={logIn}/>
-    <Route path="/logout" component={logOut}/>
-    <Route path="/" component={campaigns} onEnter={authenticate}/>
-    <Route path="*" component={notFound}/>
-  </Router>
-  ), document.getElementById('root'));
+render(<Root store={store} />, document.getElementById('root'));

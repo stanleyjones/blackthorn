@@ -1,6 +1,5 @@
 import {
   GraphQLBoolean,
-  GraphQLList,
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
@@ -15,10 +14,6 @@ export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-      user: {
-        type: new GraphQLList(userType),
-        resolve: () => User.find(),
-      },
       user: {
         type: userType,
         args: {

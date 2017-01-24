@@ -15,13 +15,13 @@ module.exports = {
     path: `${__dirname}/public`,
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-      output: {
-        comments: false,
-      },
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false,
+    //   },
+    //   output: {
+    //     comments: false,
+    //   },
+    // }),
   ],
 };
