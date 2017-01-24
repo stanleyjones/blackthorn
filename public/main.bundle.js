@@ -28821,7 +28821,7 @@
 	var fetchUser = exports.fetchUser = function fetchUser() {
 	  return function (dispatch) {
 	    dispatch({ type: FETCHING_USER });
-	    (0, _helpers.queryGraph)('{\n    user(email: "stanley@sunshocked.com") {\n      email\n      name\n      token\n    }\n  }').then(_helpers.parseResponse).then(function (json) {
+	    (0, _helpers.queryGraph)('{ user(email: "stanley@sunshocked.com") { email, name, campaigns { name } } }').then(_helpers.parseResponse).then(function (json) {
 	      return dispatch({ type: FETCHED_USER, data: json.data });
 	    });
 	  };

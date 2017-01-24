@@ -1,17 +1,53 @@
-import mongoose from 'mongoose';
-import crypto from 'crypto';
+import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql';
+import { sign } from 'jsonwebtoken';
 
-const userSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  admin: Boolean,
-  email: String,
-  hash: String,
-  token: String,
+import { SECRET } from '../constants';
+
+import { findAll, findOne, setOne } from './helpers';
+import Campaign, { findCampaigns } from './campaign';
+
+export const findUsers = query => findAll('users', query);
+export const findUser = query => findOne('users', query);
+export const setUser = (query, doc) => setOne('users', query, doc);
+
+const User = new GraphQLObjectType({
+  name: 'User',
+  fields: {
+    _id: { type: GraphQLID },
+    admin: { type: GraphQLBoolean },
+    campaigns: {
+      type: new GraphQLList(Campaign),
+      resolve: ({ _id: userId }) => findCampaigns({ userId }),
+    },
+    email: { type: GraphQLString },
+    name: { type: GraphQLString },
+    token: { type: GraphQLString },
+  },
 });
 
-userSchema.methods.generateHash = (email) => {
-  this.hash = crypto.createHash('md5').update(email).digest('hex');
-  this.save();
+export const queryUsers = {
+  type: new GraphQLList(User),
+  args: {
+    email: { type: GraphQLString },
+  },
+  resolve: (_, args) => findUsers(args),
 };
 
-export default mongoose.model('User', userSchema);
+export const queryUser = {
+  type: User,
+  args: {
+    email: { type: GraphQLString },
+  },
+  resolve: (_, args) => findUser(args),
+};
+
+export const authUser = {
+  type: User,
+  args: {
+    email: { type: GraphQLString },
+    admin: { type: GraphQLBoolean },
+  },
+  resolve: (_, args) => setUser(args, {
+    token: sign(args, SECRET),
+  }, { new: true }),
+};

@@ -1,18 +1,18 @@
-'use strict';
+import { GraphQLID, GraphQLObjectType, GraphQLString } from 'graphql';
 
-var mongoose = require('mongoose');
+import { findAll, findOne, setOne } from './helpers';
 
-var campaignSchema = mongoose.Schema({
-	name: String
+export const findCampaigns = query => findAll('campaigns', query);
+export const findCampaign = query => findOne('campaigns', query);
+export const setCampaign = (query, doc) => setOne('campaigns', query, doc);
+
+const Campaign = new GraphQLObjectType({
+  name: 'Campaign',
+  fields: {
+    _id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    userId: { type: GraphQLID },
+  },
 });
 
-var Campaign = mongoose.model('Campaign', campaignSchema);
-
-exports.seed = function () {
-	Campaign.find({}).exec(function (err, collection) {
-		if (collection.length === 0) {
-			Campaign.create({ name: 'Seed Campaign 1' });
-			Campaign.create({ name: 'Seed Campaign 2' });
-		}
-	});
-};
+export default Campaign;
