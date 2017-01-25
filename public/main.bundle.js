@@ -22557,6 +22557,10 @@
 
 	var _reactRedux = __webpack_require__(255);
 
+	var _CampaignList = __webpack_require__(281);
+
+	var _CampaignList2 = _interopRequireDefault(_CampaignList);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var logIn = function logIn() {
@@ -22580,18 +22584,6 @@
 	      _reactRouter.Link,
 	      { to: '/login' },
 	      'Log In'
-	    )
-	  );
-	};
-	var campaigns = function campaigns() {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    'Campaigns ',
-	    _react2.default.createElement(
-	      _reactRouter.Link,
-	      { to: '/logout' },
-	      'Log Out'
 	    )
 	  );
 	};
@@ -22623,7 +22615,7 @@
 	      { history: _reactRouter.browserHistory },
 	      _react2.default.createElement(_reactRouter.Route, { path: '/login', component: logIn }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/logout', component: logOut }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/', component: campaigns, onEnter: authenticate }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/', component: _CampaignList2.default, onEnter: authenticate }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '*', component: notFound })
 	    )
 	  );
@@ -28811,12 +28803,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.fetchUser = undefined;
+	exports.fetchUser = exports.FETCHED_USER = exports.FETCHING_USER = undefined;
 
 	var _helpers = __webpack_require__(273);
 
-	var FETCHING_USER = 'FETCHING_USER';
-	var FETCHED_USER = 'FETCHED_USER';
+	var FETCHING_USER = exports.FETCHING_USER = 'FETCHING_USER';
+	var FETCHED_USER = exports.FETCHED_USER = 'FETCHED_USER';
 
 	var fetchUser = exports.fetchUser = function fetchUser() {
 	  return function (dispatch) {
@@ -29323,15 +29315,31 @@
 
 /***/ },
 /* 275 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var reducer = function reducer(state, action) {
+
+	var _actions = __webpack_require__(272);
+
+	var initState = {
+	  loading: false,
+	  data: {}
+	};
+
+	var reducer = function reducer() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
+	  var action = arguments[1];
+
 	  switch (action.type) {
+	    case _actions.FETCHING_USER:
+	      return Object.assign({}, state, { loading: true });
+
+	    case _actions.FETCHED_USER:
+	      return Object.assign({}, state, { loading: false, data: action.data.user });
 	    default:
 	      return {};
 	  }
@@ -29359,15 +29367,31 @@
 
 /***/ },
 /* 277 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var reducer = function reducer(state, action) {
+
+	var _actions = __webpack_require__(272);
+
+	var initState = {
+	  loading: false,
+	  data: {}
+	};
+
+	var reducer = function reducer() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
+	  var action = arguments[1];
+
 	  switch (action.type) {
+	    case _actions.FETCHING_USER:
+	      return Object.assign({}, state, { loading: true });
+
+	    case _actions.FETCHED_USER:
+	      return Object.assign({}, state, { loading: false, data: action.data.user.campaigns });
 	    default:
 	      return {};
 	  }
@@ -29456,6 +29480,50 @@
 	thunk.withExtraArgument = createThunkMiddleware;
 
 	exports['default'] = thunk;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(255);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CampaignList = function CampaignList(props) {
+	  return _react2.default.createElement(
+	    'ul',
+	    null,
+	    props.campaigns.map(function (campaign) {
+	      return _react2.default.createElement(
+	        'li',
+	        null,
+	        campaign.name
+	      );
+	    })
+	  );
+	};
+
+	CampaignList.proptypes = {
+	  campaigns: _react.PropTypes.array
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    campaigns: state.campaigns.data || []
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(CampaignList);
 
 /***/ }
 /******/ ]);

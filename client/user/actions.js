@@ -1,7 +1,7 @@
 import { parseResponse, queryGraph } from '../helpers';
 
-const FETCHING_USER = 'FETCHING_USER';
-const FETCHED_USER = 'FETCHED_USER';
+export const FETCHING_USER = 'FETCHING_USER';
+export const FETCHED_USER = 'FETCHED_USER';
 
 export const fetchUser = () => (dispatch) => {
   dispatch({ type: FETCHING_USER });
