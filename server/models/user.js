@@ -44,14 +44,38 @@ export const queryUser = {
   },
 };
 
-export const authUser = {
-  type: GraphQLString,
+export const requestPasscode = {
+  type: GraphQLID,
   args: {
     email: { type: GraphQLString },
   },
   resolve: async (_, args) => {
     const user = await findUser(args);
-    if (user) { return sign({ ...user }, SECRET); }
-    return null;
+    if (!user) { return null; }
+    const { _id } = user;
+    updateUser({ _id }, { passcode: '12345' });
+    return _id;
+  },
+};
+
+const Auth = new GraphQLObjectType({
+  name: 'Auth',
+  fields: {
+    error: { type: GraphQLString },
+    token: { type: GraphQLString },
+  },
+});
+
+export const auth = {
+  type: Auth,
+  args: {
+    id: { type: GraphQLID },
+    passcode: { type: GraphQLString },
+  },
+  resolve: async (_, args) => {
+    const { id: _id, passcode } = args;
+    const user = await findUser({ _id: new ObjectId(_id), passcode });
+    if (user) { return { token: sign({ ...user }, SECRET) }; }
+    return { error: 'user_not_found' };
   },
 };

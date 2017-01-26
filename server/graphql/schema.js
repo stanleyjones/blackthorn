@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 
-import { authUser, queryUser, queryUsers } from '../models/user';
+import { auth, queryUser, queryUsers, requestPasscode } from '../models/user';
 import { saveCampaign } from '../models/campaign';
 
 export default new GraphQLSchema({
@@ -14,7 +14,8 @@ export default new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-      authUser,
+      auth,
+      requestPasscode,
       saveCampaign,
     },
   }),

@@ -1,4 +1,4 @@
-import { AUTHENTICATED_USER, FETCHING_USER, FETCHED_USER } from '../user/actions';
+import { FETCHING_USER, FETCHED_USER } from '../user/actions';
 
 import { NEW_CAMPAIGN, SAVING_CAMPAIGN, SAVED_CAMPAIGN } from './actions';
 
@@ -17,7 +17,6 @@ const reducer = (state = initState, action) => {
     case FETCHING_USER:
       return { ...state, loading: true };
 
-    case AUTHENTICATED_USER:
     case FETCHED_USER:
       return { ...state, loading: false, data: action.data.user.campaigns };
 

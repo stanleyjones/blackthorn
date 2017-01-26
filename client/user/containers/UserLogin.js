@@ -1,29 +1,27 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { authUser } from '../actions';
+import { authUser, requestPasscode } from '../actions';
 
-class UserLogin extends PureComponent {
-  render() {
-    return (
-      <div>
-        <h1>Please log in.</h1>
-        <input ref="email" />
-        <button onClick={() => this.props.authUser(this.refs.email.value)}>Submit</button>
-      </div>
-    );
-  }
-}
+import { EnterPasscode, RequestPasscode } from '../components';
+
+const UserLogin = props => props.requestedPasscode
+  ? <EnterPasscode authUser={props.authUser} userId={props.requestedPasscode} />
+  : <RequestPasscode requestPasscode={props.requestPasscode} />;
 
 UserLogin.propTypes = {
   authUser: PropTypes.func,
+  requestPasscode: PropTypes.func,
+  requestedPasscode: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
+  requestedPasscode: state.user.requestedPasscode,
 });
 
 const mapDispatchToProps = dispatch => ({
-  authUser: email => dispatch(authUser(email)),
+  authUser: (id, passcode) => dispatch(authUser(id, passcode)),
+  requestPasscode: email => dispatch(requestPasscode(email)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserLogin);
