@@ -26,9 +26,18 @@ export const findOne = (collection, query) => promisify((db, resolve) => {
     });
 });
 
-export const setOne = (collection, query, doc) => promisify((db, resolve) => {
+export const insertOne = (collection, doc) => promisify((db, resolve) => {
   db.collection(collection)
-    .findOneAndUpdate(query, { $set: doc }, { returnOriginal: false, upsert: true })
+    .insertOne(doc)
+    .then(result => {
+      db.close();
+      resolve(result);
+    });
+});
+
+export const updateOne = (collection, query, doc) => promisify((db, resolve) => {
+  db.collection(collection)
+    .findOneAndUpdate(query, { $set: doc }, { returnOriginal: false })
     .then(result => {
       db.close();
       resolve(result);

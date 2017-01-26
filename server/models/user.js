@@ -3,12 +3,12 @@ import { sign } from 'jsonwebtoken';
 
 import { SECRET } from '../constants';
 
-import { findAll, findOne, setOne } from './helpers';
+import { findAll, findOne, updateOne } from './helpers';
 import Campaign, { findCampaigns } from './campaign';
 
 export const findUsers = query => findAll('users', query);
 export const findUser = query => findOne('users', query);
-export const setUser = (query, doc) => setOne('users', query, doc);
+export const updateUser = (query, doc) => updateOne('users', query, doc);
 
 const User = new GraphQLObjectType({
   name: 'User',
@@ -47,7 +47,7 @@ export const authUser = {
     email: { type: GraphQLString },
     admin: { type: GraphQLBoolean },
   },
-  resolve: (_, args) => setUser(args, {
+  resolve: (_, args) => updateUser(args, {
     token: sign(args, SECRET),
   }, { new: true }),
 };
