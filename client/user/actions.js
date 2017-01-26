@@ -1,4 +1,8 @@
+import { browserHistory } from 'react-router';
+
 import { parseResponse, queryGraph } from '../helpers';
+
+import { clearToken, getToken, setToken } from './helpers';
 
 export const AUTHENTICATING_USER = 'AUTHENTICATING_USER';
 export const AUTHENTICATION_FAILED = 'AUTHENTICATION_FAILED';
@@ -8,7 +12,7 @@ export const FETCHED_USER = 'FETCHED_USER';
 export const fetchUser = () => (dispatch) => {
   dispatch({ type: FETCHING_USER });
   queryGraph(`query {
-    user: queryUser(token: "${localStorage.getItem('jwt_token')}") {
+    user: queryUser(token: "${getToken()}") {
       id: _id,
       campaigns { id: _id, name },
       name,
@@ -25,10 +29,12 @@ export const authUser = email => (dispatch) => {
   .then(json => {
     const { data: { token } } = json;
     if (token) {
-      localStorage.setItem('jwt_token', token);
+      setToken(token);
+      browserHistory.push('/');
       return dispatch(fetchUser());
     }
-    localStorage.removeItem('jwt_token');
+    clearToken();
+    browserHistory.push('/login');
     return dispatch({ type: AUTHENTICATION_FAILED });
   });
 };

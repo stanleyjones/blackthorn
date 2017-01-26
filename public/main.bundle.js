@@ -58,7 +58,7 @@
 
 	var _root2 = _interopRequireDefault(_root);
 
-	var _reducer = __webpack_require__(276);
+	var _reducer = __webpack_require__(277);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -22562,7 +22562,7 @@
 
 	var _UserLogin2 = _interopRequireDefault(_UserLogin);
 
-	var _helpers = __webpack_require__(275);
+	var _helpers = __webpack_require__(276);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28719,6 +28719,8 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -28727,33 +28729,62 @@
 
 	var _actions = __webpack_require__(271);
 
+	var _actions2 = __webpack_require__(275);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var CampaignList = function CampaignList(props) {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    _react2.default.createElement(
-	      'ul',
-	      null,
-	      props.campaigns.map(function (campaign, index) {
-	        return _react2.default.createElement(
-	          'li',
-	          { key: index },
-	          campaign.name
-	        );
-	      })
-	    ),
-	    _react2.default.createElement(
-	      'button',
-	      { onClick: props.newCampaign(props.userId) },
-	      'New Campaign'
-	    )
-	  );
-	};
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CampaignList = function (_Component) {
+	  _inherits(CampaignList, _Component);
+
+	  function CampaignList() {
+	    _classCallCheck(this, CampaignList);
+
+	    return _possibleConstructorReturn(this, (CampaignList.__proto__ || Object.getPrototypeOf(CampaignList)).apply(this, arguments));
+	  }
+
+	  _createClass(CampaignList, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.fetchUser();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          this.props.campaigns.map(function (campaign, index) {
+	            return _react2.default.createElement(
+	              'li',
+	              { key: index },
+	              campaign.name
+	            );
+	          })
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.props.newCampaign(this.props.userId) },
+	          'New Campaign'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return CampaignList;
+	}(_react.Component);
 
 	CampaignList.propTypes = {
 	  campaigns: _react.PropTypes.array,
+	  fetchUser: _react.PropTypes.func,
 	  newCampaign: _react.PropTypes.func,
 	  userId: _react.PropTypes.string
 	};
@@ -28767,6 +28798,9 @@
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
+	    fetchUser: function fetchUser() {
+	      return dispatch((0, _actions2.fetchUser)());
+	    },
 	    newCampaign: function newCampaign(userId) {
 	      return function () {
 	        return dispatch((0, _actions.newCampaign)(userId));
@@ -28829,10 +28863,7 @@
 	var queryGraph = exports.queryGraph = function queryGraph(query) {
 	  return fetch('http://localhost:9000/ql', {
 	    method: 'POST',
-	    headers: {
-	      'Content-Type': 'application/graphql',
-	      Authorization: 'Bearer ' + localStorage.getItem('jwt_token')
-	    },
+	    headers: { 'Content-Type': 'application/graphql' },
 	    body: query
 	  });
 	};
@@ -29328,7 +29359,7 @@
 
 	var _reactRedux = __webpack_require__(255);
 
-	var _actions = __webpack_require__(278);
+	var _actions = __webpack_require__(275);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29395,6 +29426,55 @@
 
 /***/ },
 /* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.authUser = exports.fetchUser = exports.FETCHED_USER = exports.FETCHING_USER = exports.AUTHENTICATION_FAILED = exports.AUTHENTICATING_USER = undefined;
+
+	var _reactRouter = __webpack_require__(200);
+
+	var _helpers = __webpack_require__(272);
+
+	var _helpers2 = __webpack_require__(276);
+
+	var AUTHENTICATING_USER = exports.AUTHENTICATING_USER = 'AUTHENTICATING_USER';
+	var AUTHENTICATION_FAILED = exports.AUTHENTICATION_FAILED = 'AUTHENTICATION_FAILED';
+	var FETCHING_USER = exports.FETCHING_USER = 'FETCHING_USER';
+	var FETCHED_USER = exports.FETCHED_USER = 'FETCHED_USER';
+
+	var fetchUser = exports.fetchUser = function fetchUser() {
+	  return function (dispatch) {
+	    dispatch({ type: FETCHING_USER });
+	    (0, _helpers.queryGraph)('query {\n    user: queryUser(token: "' + (0, _helpers2.getToken)() + '") {\n      id: _id,\n      campaigns { id: _id, name },\n      name,\n    }\n  }').then(_helpers.parseResponse).then(function (json) {
+	      return dispatch({ type: FETCHED_USER, data: json.data });
+	    });
+	  };
+	};
+
+	var authUser = exports.authUser = function authUser(email) {
+	  return function (dispatch) {
+	    dispatch({ type: AUTHENTICATING_USER });
+	    (0, _helpers.queryGraph)('mutation { token: authUser(email: "' + email + '") }').then(_helpers.parseResponse).then(function (json) {
+	      var token = json.data.token;
+
+	      if (token) {
+	        (0, _helpers2.setToken)(token);
+	        _reactRouter.browserHistory.push('/');
+	        return dispatch(fetchUser());
+	      }
+	      (0, _helpers2.clearToken)();
+	      _reactRouter.browserHistory.push('/login');
+	      return dispatch({ type: AUTHENTICATION_FAILED });
+	    });
+	  };
+	};
+
+/***/ },
+/* 276 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29402,8 +29482,20 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	var JWT_TOKEN = 'jwt_token';
+
+	var clearToken = exports.clearToken = function clearToken() {
+	  return localStorage.removeItem(JWT_TOKEN);
+	};
+	var getToken = exports.getToken = function getToken() {
+	  return localStorage.getItem(JWT_TOKEN);
+	};
+	var setToken = exports.setToken = function setToken(token) {
+	  return localStorage.setItem(JWT_TOKEN, token);
+	};
+
 	var isLoggedIn = function isLoggedIn() {
-	  return !!localStorage.getItem('jwt_token');
+	  return !!getToken();
 	};
 
 	var authenticate = exports.authenticate = function authenticate(nextState, replace) {
@@ -29413,7 +29505,7 @@
 	};
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29424,7 +29516,7 @@
 
 	var _redux = __webpack_require__(32);
 
-	var _user = __webpack_require__(277);
+	var _user = __webpack_require__(278);
 
 	var _user2 = _interopRequireDefault(_user);
 
@@ -29442,7 +29534,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29452,7 +29544,7 @@
 	});
 	exports.fetchUser = exports.authUser = undefined;
 
-	var _actions = __webpack_require__(278);
+	var _actions = __webpack_require__(275);
 
 	Object.defineProperty(exports, 'authUser', {
 	  enumerable: true,
@@ -29476,49 +29568,6 @@
 	exports.default = _reducer2.default;
 
 /***/ },
-/* 278 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.authUser = exports.fetchUser = exports.FETCHED_USER = exports.FETCHING_USER = exports.AUTHENTICATION_FAILED = exports.AUTHENTICATING_USER = undefined;
-
-	var _helpers = __webpack_require__(272);
-
-	var AUTHENTICATING_USER = exports.AUTHENTICATING_USER = 'AUTHENTICATING_USER';
-	var AUTHENTICATION_FAILED = exports.AUTHENTICATION_FAILED = 'AUTHENTICATION_FAILED';
-	var FETCHING_USER = exports.FETCHING_USER = 'FETCHING_USER';
-	var FETCHED_USER = exports.FETCHED_USER = 'FETCHED_USER';
-
-	var fetchUser = exports.fetchUser = function fetchUser() {
-	  return function (dispatch) {
-	    dispatch({ type: FETCHING_USER });
-	    (0, _helpers.queryGraph)('query {\n    user: queryUser(token: "' + localStorage.getItem('jwt_token') + '") {\n      id: _id,\n      campaigns { id: _id, name },\n      name,\n    }\n  }').then(_helpers.parseResponse).then(function (json) {
-	      return dispatch({ type: FETCHED_USER, data: json.data });
-	    });
-	  };
-	};
-
-	var authUser = exports.authUser = function authUser(email) {
-	  return function (dispatch) {
-	    dispatch({ type: AUTHENTICATING_USER });
-	    (0, _helpers.queryGraph)('mutation { token: authUser(email: "' + email + '") }').then(_helpers.parseResponse).then(function (json) {
-	      var token = json.data.token;
-
-	      if (token) {
-	        localStorage.setItem('jwt_token', token);
-	        return dispatch(fetchUser());
-	      }
-	      localStorage.removeItem('jwt_token');
-	      return dispatch({ type: AUTHENTICATION_FAILED });
-	    });
-	  };
-	};
-
-/***/ },
 /* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -29530,7 +29579,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _actions = __webpack_require__(278);
+	var _actions = __webpack_require__(275);
 
 	var initState = {
 	  loading: false,
@@ -29588,7 +29637,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _actions = __webpack_require__(278);
+	var _actions = __webpack_require__(275);
 
 	var _actions2 = __webpack_require__(271);
 
