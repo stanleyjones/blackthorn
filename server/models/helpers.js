@@ -37,9 +37,9 @@ export const insertOne = (collection, doc) => promisify((db, resolve) => {
 
 export const updateOne = (collection, query, doc) => promisify((db, resolve) => {
   db.collection(collection)
-    .findOneAndUpdate(query, { $set: doc }, { returnOriginal: false })
-    .then(result => {
+    .findOneAndUpdate(query, { $set: doc }, { returnNewDocument: true })
+    .then(({ value }) => {
       db.close();
-      resolve(result);
+      resolve(value);
     });
 });

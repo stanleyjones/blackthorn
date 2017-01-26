@@ -69,7 +69,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var store = (0, _redux.createStore)(_reducer2.default, (0, _redux.applyMiddleware)(_middleware.logger, _middleware.thunk));
-	store.dispatch((0, _user.fetchUser)());
+	store.dispatch((0, _user.authUser)());
 
 	(0, _reactDom.render)(_react2.default.createElement(_root2.default, { store: store }), document.getElementById('root'));
 
@@ -28854,7 +28854,10 @@
 	var queryGraph = exports.queryGraph = function queryGraph(query) {
 	  return fetch('http://localhost:9000/ql', {
 	    method: 'POST',
-	    headers: { 'Content-Type': 'application/graphql' },
+	    headers: {
+	      'Content-Type': 'application/graphql',
+	      Authorization: 'Bearer ' + localStorage.getItem('jwt_token')
+	    },
 	    body: query
 	  });
 	};
@@ -29389,10 +29392,16 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.fetchUser = undefined;
+	exports.fetchUser = exports.authUser = undefined;
 
 	var _actions = __webpack_require__(277);
 
+	Object.defineProperty(exports, 'authUser', {
+	  enumerable: true,
+	  get: function get() {
+	    return _actions.authUser;
+	  }
+	});
 	Object.defineProperty(exports, 'fetchUser', {
 	  enumerable: true,
 	  get: function get() {
@@ -29417,18 +29426,30 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.fetchUser = exports.FETCHED_USER = exports.FETCHING_USER = undefined;
+	exports.authUser = exports.fetchUser = exports.FETCHED_USER = exports.FETCHING_USER = exports.AUTHENTICATED_USER = exports.AUTHENTICATING_USER = undefined;
 
 	var _helpers = __webpack_require__(272);
 
+	var AUTHENTICATING_USER = exports.AUTHENTICATING_USER = 'AUTHENTICATING_USER';
+	var AUTHENTICATED_USER = exports.AUTHENTICATED_USER = 'AUTHENTICATED_USER';
 	var FETCHING_USER = exports.FETCHING_USER = 'FETCHING_USER';
 	var FETCHED_USER = exports.FETCHED_USER = 'FETCHED_USER';
 
 	var fetchUser = exports.fetchUser = function fetchUser() {
 	  return function (dispatch) {
 	    dispatch({ type: FETCHING_USER });
-	    (0, _helpers.queryGraph)('query {\n    user(email: "stanley@sunshocked.com") { id: _id, email, name, campaigns { id: _id, name } }\n  }').then(_helpers.parseResponse).then(function (json) {
+	    (0, _helpers.queryGraph)('query {\n    user: queryUser(token: "' + localStorage.getItem('jwt_token') + '") {\n      id: _id,\n      campaigns { id: _id, name },\n      name,\n    }\n  }').then(_helpers.parseResponse).then(function (json) {
 	      return dispatch({ type: FETCHED_USER, data: json.data });
+	    });
+	  };
+	};
+
+	var authUser = exports.authUser = function authUser() {
+	  return function (dispatch) {
+	    dispatch({ type: AUTHENTICATING_USER });
+	    (0, _helpers.queryGraph)('mutation { token: authUser(email: "stanley@sunshocked.com") }').then(_helpers.parseResponse).then(function (json) {
+	      localStorage.setItem('jwt_token', json.data.token);
+	      return dispatch(fetchUser());
 	    });
 	  };
 	};
@@ -29443,6 +29464,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _actions = __webpack_require__(277);
 
 	var initState = {
@@ -29456,11 +29479,13 @@
 
 	  switch (action.type) {
 
+	    case _actions.AUTHENTICATING_USER:
 	    case _actions.FETCHING_USER:
-	      return Object.assign({}, state, { loading: true });
+	      return _extends({}, state, { loading: true });
 
+	    case _actions.AUTHENTICATED_USER:
 	    case _actions.FETCHED_USER:
-	      return Object.assign({}, state, { loading: false, data: action.data.user });
+	      return _extends({}, state, { loading: false, data: action.data.user });
 
 	    default:
 	      return state;
@@ -29498,6 +29523,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _actions = __webpack_require__(277);
 
 	var _actions2 = __webpack_require__(271);
@@ -29516,15 +29543,18 @@
 	  switch (action.type) {
 
 	    case _actions2.NEW_CAMPAIGN:
-	      return Object.assign({}, state, {
-	        data: [].concat(_toConsumableArray(state.data), [{ name: 'New Campaign' }])
-	      });
+	      return _extends({}, state, { data: [].concat(_toConsumableArray(state.data), [{ name: 'New Campaign' }]) });
 
+	    case _actions2.SAVING_CAMPAIGN:
 	    case _actions.FETCHING_USER:
-	      return Object.assign({}, state, { loading: true });
+	      return _extends({}, state, { loading: true });
 
+	    case _actions.AUTHENTICATED_USER:
 	    case _actions.FETCHED_USER:
-	      return Object.assign({}, state, { loading: false, data: action.data.user.campaigns });
+	      return _extends({}, state, { loading: false, data: action.data.user.campaigns });
+
+	    case _actions2.SAVED_CAMPAIGN:
+	      return _extends({}, state, { loading: false, data: action.data.campaigns });
 
 	    default:
 	      return state;

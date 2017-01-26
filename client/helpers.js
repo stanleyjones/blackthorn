@@ -3,7 +3,10 @@ import 'whatwg-fetch';
 export const queryGraph = query =>
   fetch('http://localhost:9000/ql', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/graphql' },
+    headers: {
+      'Content-Type': 'application/graphql',
+      Authorization: `Bearer ${localStorage.getItem('jwt_token')}`,
+    },
     body: query,
   });
 

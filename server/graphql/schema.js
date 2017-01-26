@@ -7,14 +7,14 @@ export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      users: queryUsers,
-      user: queryUser,
+      queryUsers,
+      queryUser,
     },
   }),
   mutation: new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-      auth: authUser,
+      authUser,
       saveCampaign,
     },
   }),

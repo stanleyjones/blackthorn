@@ -1,4 +1,9 @@
-import { FETCHING_USER, FETCHED_USER } from './actions';
+import {
+  AUTHENTICATING_USER,
+  AUTHENTICATED_USER,
+  FETCHING_USER,
+  FETCHED_USER,
+} from './actions';
 
 const initState = {
   loading: false,
@@ -8,11 +13,13 @@ const initState = {
 const reducer = (state = initState, action) => {
   switch (action.type) {
 
+    case AUTHENTICATING_USER:
     case FETCHING_USER:
-      return Object.assign({}, state, { loading: true });
+      return { ...state, loading: true };
 
+    case AUTHENTICATED_USER:
     case FETCHED_USER:
-      return Object.assign({}, state, { loading: false, data: action.data.user });
+      return { ...state, loading: false, data: action.data.user };
 
     default:
       return state;

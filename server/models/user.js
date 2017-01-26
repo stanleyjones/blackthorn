@@ -1,5 +1,6 @@
 import { GraphQLBoolean, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql';
-import { sign } from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
+import { sign, verify } from 'jsonwebtoken';
 
 import { SECRET } from '../constants';
 
@@ -17,11 +18,10 @@ const User = new GraphQLObjectType({
     admin: { type: GraphQLBoolean },
     campaigns: {
       type: new GraphQLList(Campaign),
-      resolve: ({ _id: userId }) => findCampaigns({ userId }),
+      resolve: ({ _id }) => findCampaigns({ userId: _id }),
     },
     email: { type: GraphQLString },
     name: { type: GraphQLString },
-    token: { type: GraphQLString },
   },
 });
 
@@ -36,18 +36,21 @@ export const queryUsers = {
 export const queryUser = {
   type: User,
   args: {
-    email: { type: GraphQLString },
+    token: { type: GraphQLString },
   },
-  resolve: (_, args) => findUser(args),
+  resolve: (_, args) => {
+    const { _id } = verify(args.token, SECRET);
+    return findUser({ _id: new ObjectId(_id) });
+  },
 };
 
 export const authUser = {
-  type: User,
+  type: GraphQLString,
   args: {
     email: { type: GraphQLString },
-    admin: { type: GraphQLBoolean },
   },
-  resolve: (_, args) => updateUser(args, {
-    token: sign(args, SECRET),
-  }, { new: true }),
+  resolve: async (_, args) => {
+    const { _id } = await findUser(args);
+    return sign({ _id }, SECRET);
+  },
 };
