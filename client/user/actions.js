@@ -1,7 +1,7 @@
 import { parseResponse, queryGraph } from '../helpers';
 
 export const AUTHENTICATING_USER = 'AUTHENTICATING_USER';
-export const AUTHENTICATED_USER = 'AUTHENTICATED_USER';
+export const AUTHENTICATION_FAILED = 'AUTHENTICATION_FAILED';
 export const FETCHING_USER = 'FETCHING_USER';
 export const FETCHED_USER = 'FETCHED_USER';
 
@@ -18,12 +18,17 @@ export const fetchUser = () => (dispatch) => {
   .then(json => dispatch({ type: FETCHED_USER, data: json.data }));
 };
 
-export const authUser = () => (dispatch) => {
+export const authUser = email => (dispatch) => {
   dispatch({ type: AUTHENTICATING_USER });
-  queryGraph('mutation { token: authUser(email: "stanley@sunshocked.com") }')
+  queryGraph(`mutation { token: authUser(email: "${email}") }`)
   .then(parseResponse)
   .then(json => {
-    localStorage.setItem('jwt_token', json.data.token);
-    return dispatch(fetchUser());
+    const { data: { token } } = json;
+    if (token) {
+      localStorage.setItem('jwt_token', token);
+      return dispatch(fetchUser());
+    }
+    localStorage.removeItem('jwt_token');
+    return dispatch({ type: AUTHENTICATION_FAILED });
   });
 };

@@ -50,7 +50,8 @@ export const authUser = {
     email: { type: GraphQLString },
   },
   resolve: async (_, args) => {
-    const { _id } = await findUser(args);
-    return sign({ _id }, SECRET);
+    const user = await findUser(args);
+    if (user) { return sign({ ...user }, SECRET); }
+    return null;
   },
 };

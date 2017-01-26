@@ -58,18 +58,15 @@
 
 	var _root2 = _interopRequireDefault(_root);
 
-	var _reducer = __webpack_require__(275);
+	var _reducer = __webpack_require__(276);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var _middleware = __webpack_require__(281);
-
-	var _user = __webpack_require__(276);
+	var _middleware = __webpack_require__(282);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var store = (0, _redux.createStore)(_reducer2.default, (0, _redux.applyMiddleware)(_middleware.logger, _middleware.thunk));
-	store.dispatch((0, _user.authUser)());
 
 	(0, _reactDom.render)(_react2.default.createElement(_root2.default, { store: store }), document.getElementById('root'));
 
@@ -22561,34 +22558,14 @@
 
 	var _CampaignList2 = _interopRequireDefault(_CampaignList);
 
-	var _helpers = __webpack_require__(274);
+	var _UserLogin = __webpack_require__(274);
+
+	var _UserLogin2 = _interopRequireDefault(_UserLogin);
+
+	var _helpers = __webpack_require__(275);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var logIn = function logIn() {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    'Logged In. ',
-	    _react2.default.createElement(
-	      _reactRouter.Link,
-	      { to: '/logout' },
-	      'Log Out'
-	    )
-	  );
-	};
-	var logOut = function logOut() {
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    'Logged Out. ',
-	    _react2.default.createElement(
-	      _reactRouter.Link,
-	      { to: '/login' },
-	      'Log In'
-	    )
-	  );
-	};
 	var notFound = function notFound() {
 	  return _react2.default.createElement(
 	    'div',
@@ -22605,12 +22582,15 @@
 	    _react2.default.createElement(
 	      _reactRouter.Router,
 	      { history: _reactRouter.browserHistory },
-	      _react2.default.createElement(_reactRouter.Route, { path: '/login', component: logIn }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/logout', component: logOut }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _UserLogin2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/', component: _CampaignList2.default, onEnter: _helpers.authenticate }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '*', component: notFound })
 	    )
 	  );
+	};
+
+	Root.propTypes = {
+	  store: _react.PropTypes.object
 	};
 
 	exports.default = Root;
@@ -28743,8 +28723,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _redux = __webpack_require__(32);
-
 	var _reactRedux = __webpack_require__(255);
 
 	var _actions = __webpack_require__(271);
@@ -28777,7 +28755,6 @@
 	CampaignList.propTypes = {
 	  campaigns: _react.PropTypes.array,
 	  newCampaign: _react.PropTypes.func,
-	  saveCampaign: _react.PropTypes.func,
 	  userId: _react.PropTypes.string
 	};
 
@@ -28789,15 +28766,13 @@
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return Object.assign((0, _redux.bindActionCreators)({
-	    saveCampaign: _actions.saveCampaign
-	  }, dispatch), {
+	  return {
 	    newCampaign: function newCampaign(userId) {
 	      return function () {
 	        return dispatch((0, _actions.newCampaign)(userId));
 	      };
 	    }
-	  });
+	  };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignList);
@@ -29337,6 +29312,89 @@
 
 /***/ },
 /* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(255);
+
+	var _actions = __webpack_require__(278);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserLogin = function (_PureComponent) {
+	  _inherits(UserLogin, _PureComponent);
+
+	  function UserLogin() {
+	    _classCallCheck(this, UserLogin);
+
+	    return _possibleConstructorReturn(this, (UserLogin.__proto__ || Object.getPrototypeOf(UserLogin)).apply(this, arguments));
+	  }
+
+	  _createClass(UserLogin, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'Please log in.'
+	        ),
+	        _react2.default.createElement('input', { ref: 'email' }),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick() {
+	              return _this2.props.authUser(_this2.refs.email.value);
+	            } },
+	          'Submit'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return UserLogin;
+	}(_react.PureComponent);
+
+	UserLogin.propTypes = {
+	  authUser: _react.PropTypes.func
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {};
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    authUser: function authUser(email) {
+	      return dispatch((0, _actions.authUser)(email));
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserLogin);
+
+/***/ },
+/* 275 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29345,7 +29403,7 @@
 	  value: true
 	});
 	var isLoggedIn = function isLoggedIn() {
-	  return true;
+	  return !!localStorage.getItem('jwt_token');
 	};
 
 	var authenticate = exports.authenticate = function authenticate(nextState, replace) {
@@ -29355,7 +29413,7 @@
 	};
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29366,11 +29424,11 @@
 
 	var _redux = __webpack_require__(32);
 
-	var _user = __webpack_require__(276);
+	var _user = __webpack_require__(277);
 
 	var _user2 = _interopRequireDefault(_user);
 
-	var _campaigns = __webpack_require__(279);
+	var _campaigns = __webpack_require__(280);
 
 	var _campaigns2 = _interopRequireDefault(_campaigns);
 
@@ -29384,7 +29442,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29394,7 +29452,7 @@
 	});
 	exports.fetchUser = exports.authUser = undefined;
 
-	var _actions = __webpack_require__(277);
+	var _actions = __webpack_require__(278);
 
 	Object.defineProperty(exports, 'authUser', {
 	  enumerable: true,
@@ -29409,7 +29467,7 @@
 	  }
 	});
 
-	var _reducer = __webpack_require__(278);
+	var _reducer = __webpack_require__(279);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -29418,7 +29476,7 @@
 	exports.default = _reducer2.default;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29426,12 +29484,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.authUser = exports.fetchUser = exports.FETCHED_USER = exports.FETCHING_USER = exports.AUTHENTICATED_USER = exports.AUTHENTICATING_USER = undefined;
+	exports.authUser = exports.fetchUser = exports.FETCHED_USER = exports.FETCHING_USER = exports.AUTHENTICATION_FAILED = exports.AUTHENTICATING_USER = undefined;
 
 	var _helpers = __webpack_require__(272);
 
 	var AUTHENTICATING_USER = exports.AUTHENTICATING_USER = 'AUTHENTICATING_USER';
-	var AUTHENTICATED_USER = exports.AUTHENTICATED_USER = 'AUTHENTICATED_USER';
+	var AUTHENTICATION_FAILED = exports.AUTHENTICATION_FAILED = 'AUTHENTICATION_FAILED';
 	var FETCHING_USER = exports.FETCHING_USER = 'FETCHING_USER';
 	var FETCHED_USER = exports.FETCHED_USER = 'FETCHED_USER';
 
@@ -29444,18 +29502,24 @@
 	  };
 	};
 
-	var authUser = exports.authUser = function authUser() {
+	var authUser = exports.authUser = function authUser(email) {
 	  return function (dispatch) {
 	    dispatch({ type: AUTHENTICATING_USER });
-	    (0, _helpers.queryGraph)('mutation { token: authUser(email: "stanley@sunshocked.com") }').then(_helpers.parseResponse).then(function (json) {
-	      localStorage.setItem('jwt_token', json.data.token);
-	      return dispatch(fetchUser());
+	    (0, _helpers.queryGraph)('mutation { token: authUser(email: "' + email + '") }').then(_helpers.parseResponse).then(function (json) {
+	      var token = json.data.token;
+
+	      if (token) {
+	        localStorage.setItem('jwt_token', token);
+	        return dispatch(fetchUser());
+	      }
+	      localStorage.removeItem('jwt_token');
+	      return dispatch({ type: AUTHENTICATION_FAILED });
 	    });
 	  };
 	};
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29466,7 +29530,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _actions = __webpack_require__(277);
+	var _actions = __webpack_require__(278);
 
 	var initState = {
 	  loading: false,
@@ -29483,7 +29547,6 @@
 	    case _actions.FETCHING_USER:
 	      return _extends({}, state, { loading: true });
 
-	    case _actions.AUTHENTICATED_USER:
 	    case _actions.FETCHED_USER:
 	      return _extends({}, state, { loading: false, data: action.data.user });
 
@@ -29496,7 +29559,7 @@
 	exports.default = reducer;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29505,7 +29568,7 @@
 	  value: true
 	});
 
-	var _reducer = __webpack_require__(280);
+	var _reducer = __webpack_require__(281);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -29514,7 +29577,7 @@
 	exports.default = _reducer2.default;
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29525,7 +29588,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _actions = __webpack_require__(277);
+	var _actions = __webpack_require__(278);
 
 	var _actions2 = __webpack_require__(271);
 
@@ -29564,7 +29627,7 @@
 	exports.default = reducer;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29573,7 +29636,7 @@
 	  value: true
 	});
 
-	var _logger = __webpack_require__(282);
+	var _logger = __webpack_require__(283);
 
 	Object.defineProperty(exports, 'logger', {
 	  enumerable: true,
@@ -29582,7 +29645,7 @@
 	  }
 	});
 
-	var _reduxThunk = __webpack_require__(283);
+	var _reduxThunk = __webpack_require__(284);
 
 	Object.defineProperty(exports, 'thunk', {
 	  enumerable: true,
@@ -29594,7 +29657,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29618,7 +29681,7 @@
 	exports.default = logger;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports) {
 
 	'use strict';

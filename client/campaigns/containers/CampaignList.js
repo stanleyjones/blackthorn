@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { newCampaign, saveCampaign } from '../actions';
+import { newCampaign } from '../actions';
 
 const CampaignList = props => (
   <div>
@@ -16,7 +15,6 @@ const CampaignList = props => (
 CampaignList.propTypes = {
   campaigns: PropTypes.array,
   newCampaign: PropTypes.func,
-  saveCampaign: PropTypes.func,
   userId: PropTypes.string,
 };
 
@@ -25,13 +23,8 @@ const mapStateToProps = state => ({
   userId: state.user.data.id,
 });
 
-const mapDispatchToProps = dispatch => Object.assign(
-  bindActionCreators({
-    saveCampaign,
-  }, dispatch),
-  {
-    newCampaign: userId => () => dispatch(newCampaign(userId)),
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  newCampaign: userId => () => dispatch(newCampaign(userId)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignList);

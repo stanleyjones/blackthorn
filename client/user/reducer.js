@@ -1,6 +1,5 @@
 import {
   AUTHENTICATING_USER,
-  AUTHENTICATED_USER,
   FETCHING_USER,
   FETCHED_USER,
 } from './actions';
@@ -17,7 +16,6 @@ const reducer = (state = initState, action) => {
     case FETCHING_USER:
       return { ...state, loading: true };
 
-    case AUTHENTICATED_USER:
     case FETCHED_USER:
       return { ...state, loading: false, data: action.data.user };
 
