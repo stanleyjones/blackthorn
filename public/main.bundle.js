@@ -58,11 +58,11 @@
 
 	var _root2 = _interopRequireDefault(_root);
 
-	var _reducer = __webpack_require__(277);
+	var _reducer = __webpack_require__(282);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var _middleware = __webpack_require__(282);
+	var _middleware = __webpack_require__(287);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22554,15 +22554,13 @@
 
 	var _reactRedux = __webpack_require__(255);
 
-	var _CampaignList = __webpack_require__(270);
+	var _containers = __webpack_require__(270);
 
-	var _CampaignList2 = _interopRequireDefault(_CampaignList);
-
-	var _UserLogin = __webpack_require__(276);
+	var _UserLogin = __webpack_require__(278);
 
 	var _UserLogin2 = _interopRequireDefault(_UserLogin);
 
-	var _helpers = __webpack_require__(275);
+	var _helpers = __webpack_require__(276);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22583,7 +22581,9 @@
 	      _reactRouter.Router,
 	      { history: _reactRouter.browserHistory },
 	      _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _UserLogin2.default }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/', component: _CampaignList2.default, onEnter: _helpers.authenticate }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/', component: _containers.CampaignList, onEnter: _helpers.restorePath }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/campaigns', component: _containers.CampaignList, onEnter: _helpers.authenticate }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/campaigns/:id', component: _containers.CampaignShow, onEnter: _helpers.authenticate }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '*', component: notFound })
 	    )
 	  );
@@ -28719,6 +28719,36 @@
 	  value: true
 	});
 
+	var _CampaignList = __webpack_require__(271);
+
+	Object.defineProperty(exports, 'CampaignList', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_CampaignList).default;
+	  }
+	});
+
+	var _CampaignShow = __webpack_require__(277);
+
+	Object.defineProperty(exports, 'CampaignShow', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_CampaignShow).default;
+	  }
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -28727,9 +28757,11 @@
 
 	var _reactRedux = __webpack_require__(255);
 
-	var _actions = __webpack_require__(271);
+	var _reactRouter = __webpack_require__(200);
 
-	var _actions2 = __webpack_require__(274);
+	var _actions = __webpack_require__(272);
+
+	var _actions2 = __webpack_require__(275);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28766,7 +28798,11 @@
 	            return _react2.default.createElement(
 	              'li',
 	              { key: index },
-	              campaign.name
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/campaigns/' + campaign.id },
+	                campaign.name
+	              )
 	            );
 	          })
 	        ),
@@ -28812,7 +28848,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignList);
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28822,7 +28858,7 @@
 	});
 	exports.newCampaign = exports.saveCampaign = exports.SAVED_CAMPAIGN = exports.SAVING_CAMPAIGN = undefined;
 
-	var _helpers = __webpack_require__(272);
+	var _helpers = __webpack_require__(273);
 
 	var SAVING_CAMPAIGN = exports.SAVING_CAMPAIGN = 'SAVING_CAMPAIGN';
 	var SAVED_CAMPAIGN = exports.SAVED_CAMPAIGN = 'SAVED_CAMPAIGN';
@@ -28848,7 +28884,7 @@
 	};
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28858,7 +28894,7 @@
 	});
 	exports.parseResponse = exports.queryGraph = undefined;
 
-	__webpack_require__(273);
+	__webpack_require__(274);
 
 	var queryGraph = exports.queryGraph = function queryGraph(query) {
 	  return fetch('http://localhost:9000/ql', {
@@ -28878,7 +28914,7 @@
 	};
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports) {
 
 	(function(self) {
@@ -29342,7 +29378,7 @@
 
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29354,9 +29390,9 @@
 
 	var _reactRouter = __webpack_require__(200);
 
-	var _helpers = __webpack_require__(272);
+	var _helpers = __webpack_require__(273);
 
-	var _helpers2 = __webpack_require__(275);
+	var _helpers2 = __webpack_require__(276);
 
 	var AUTHENTICATING_USER = exports.AUTHENTICATING_USER = 'AUTHENTICATING_USER';
 	var AUTHENTICATED_USER = exports.AUTHENTICATED_USER = 'AUTHENTICATED_USER';
@@ -29409,7 +29445,7 @@
 	};
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29435,8 +29471,104 @@
 	  }
 	};
 
+	var restorePath = exports.restorePath = function restorePath(nextState, replace) {
+	  replace({ pathname: '/campaigns' });
+	};
+
 /***/ },
-/* 276 */
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(255);
+
+	var _reactRouter = __webpack_require__(200);
+
+	var _actions = __webpack_require__(275);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CampaignShow = function (_Component) {
+	  _inherits(CampaignShow, _Component);
+
+	  function CampaignShow() {
+	    _classCallCheck(this, CampaignShow);
+
+	    return _possibleConstructorReturn(this, (CampaignShow.__proto__ || Object.getPrototypeOf(CampaignShow)).apply(this, arguments));
+	  }
+
+	  _createClass(CampaignShow, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.fetchUser();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          this.props.campaign.name
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/' },
+	          'Back'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return CampaignShow;
+	}(_react.Component);
+
+	CampaignShow.propTypes = {
+	  campaign: _react.PropTypes.object,
+	  fetchUser: _react.PropTypes.func,
+	  userId: _react.PropTypes.string
+	};
+
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  return {
+	    campaign: state.campaigns.data.find(function (campaign) {
+	      return campaign.id === ownProps.params.id;
+	    }) || {},
+	    userId: state.user.data.id
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    fetchUser: function fetchUser() {
+	      return dispatch((0, _actions.fetchUser)());
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignShow);
+
+/***/ },
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29451,9 +29583,9 @@
 
 	var _reactRedux = __webpack_require__(255);
 
-	var _actions = __webpack_require__(274);
+	var _actions = __webpack_require__(275);
 
-	var _components = __webpack_require__(286);
+	var _components = __webpack_require__(279);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29487,69 +29619,6 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserLogin);
 
 /***/ },
-/* 277 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _redux = __webpack_require__(32);
-
-	var _user = __webpack_require__(278);
-
-	var _user2 = _interopRequireDefault(_user);
-
-	var _campaigns = __webpack_require__(280);
-
-	var _campaigns2 = _interopRequireDefault(_campaigns);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var rootReducer = (0, _redux.combineReducers)({
-	  user: _user2.default,
-	  campaigns: _campaigns2.default
-	});
-
-	exports.default = rootReducer;
-
-/***/ },
-/* 278 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.fetchUser = exports.authUser = undefined;
-
-	var _actions = __webpack_require__(274);
-
-	Object.defineProperty(exports, 'authUser', {
-	  enumerable: true,
-	  get: function get() {
-	    return _actions.authUser;
-	  }
-	});
-	Object.defineProperty(exports, 'fetchUser', {
-	  enumerable: true,
-	  get: function get() {
-	    return _actions.fetchUser;
-	  }
-	});
-
-	var _reducer = __webpack_require__(279);
-
-	var _reducer2 = _interopRequireDefault(_reducer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _reducer2.default;
-
-/***/ },
 /* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -29559,201 +29628,7 @@
 	  value: true
 	});
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _actions = __webpack_require__(274);
-
-	var initState = {
-	  loading: false,
-	  data: {},
-	  requestedPasscode: null
-	};
-
-	var reducer = function reducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
-	  var action = arguments[1];
-
-	  switch (action.type) {
-
-	    case _actions.AUTHENTICATING_USER:
-	    case _actions.FETCHING_USER:
-	      return _extends({}, state, { loading: true });
-
-	    case _actions.FETCHED_USER:
-	      return _extends({}, state, { loading: false, data: action.data.user });
-
-	    case _actions.REQUESTED_PASSCODE:
-	      return _extends({}, state, { requestedPasscode: action.id });
-
-	    default:
-	      return state;
-
-	  }
-	};
-
-	exports.default = reducer;
-
-/***/ },
-/* 280 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _reducer = __webpack_require__(281);
-
-	var _reducer2 = _interopRequireDefault(_reducer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _reducer2.default;
-
-/***/ },
-/* 281 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _actions = __webpack_require__(274);
-
-	var _actions2 = __webpack_require__(271);
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var initState = {
-	  loading: false,
-	  data: []
-	};
-
-	var reducer = function reducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
-	  var action = arguments[1];
-
-	  switch (action.type) {
-
-	    case _actions2.NEW_CAMPAIGN:
-	      return _extends({}, state, { data: [].concat(_toConsumableArray(state.data), [{ name: 'New Campaign' }]) });
-
-	    case _actions2.SAVING_CAMPAIGN:
-	    case _actions.FETCHING_USER:
-	      return _extends({}, state, { loading: true });
-
-	    case _actions.FETCHED_USER:
-	      return _extends({}, state, { loading: false, data: action.data.user.campaigns });
-
-	    case _actions2.SAVED_CAMPAIGN:
-	      return _extends({}, state, { loading: false, data: action.data.campaigns });
-
-	    default:
-	      return state;
-	  }
-	};
-
-	exports.default = reducer;
-
-/***/ },
-/* 282 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _logger = __webpack_require__(283);
-
-	Object.defineProperty(exports, 'logger', {
-	  enumerable: true,
-	  get: function get() {
-	    return _interopRequireDefault(_logger).default;
-	  }
-	});
-
-	var _reduxThunk = __webpack_require__(284);
-
-	Object.defineProperty(exports, 'thunk', {
-	  enumerable: true,
-	  get: function get() {
-	    return _interopRequireDefault(_reduxThunk).default;
-	  }
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ },
-/* 283 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var logger = function logger(store) {
-	  return function (next) {
-	    return function (action) {
-	      console.group(action.type);
-	      console.info('dispatching', action);
-	      var result = next(action);
-	      console.log('next state', store.getState());
-	      console.groupEnd(action.type);
-	      return result;
-	    };
-	  };
-	};
-
-	exports.default = logger;
-
-/***/ },
-/* 284 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	exports.__esModule = true;
-	function createThunkMiddleware(extraArgument) {
-	  return function (_ref) {
-	    var dispatch = _ref.dispatch,
-	        getState = _ref.getState;
-	    return function (next) {
-	      return function (action) {
-	        if (typeof action === 'function') {
-	          return action(dispatch, getState, extraArgument);
-	        }
-
-	        return next(action);
-	      };
-	    };
-	  };
-	}
-
-	var thunk = createThunkMiddleware();
-	thunk.withExtraArgument = createThunkMiddleware;
-
-	exports['default'] = thunk;
-
-/***/ },
-/* 285 */,
-/* 286 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _EnterPasscode = __webpack_require__(287);
+	var _EnterPasscode = __webpack_require__(280);
 
 	Object.defineProperty(exports, 'EnterPasscode', {
 	  enumerable: true,
@@ -29762,7 +29637,7 @@
 	  }
 	});
 
-	var _RequestPasscode = __webpack_require__(288);
+	var _RequestPasscode = __webpack_require__(281);
 
 	Object.defineProperty(exports, 'RequestPasscode', {
 	  enumerable: true,
@@ -29774,7 +29649,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 287 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29842,7 +29717,7 @@
 	exports.default = EnterPasscode;
 
 /***/ },
-/* 288 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29907,6 +29782,262 @@
 	};
 
 	exports.default = EmailForm;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _redux = __webpack_require__(32);
+
+	var _user = __webpack_require__(283);
+
+	var _user2 = _interopRequireDefault(_user);
+
+	var _campaigns = __webpack_require__(285);
+
+	var _campaigns2 = _interopRequireDefault(_campaigns);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var rootReducer = (0, _redux.combineReducers)({
+	  user: _user2.default,
+	  campaigns: _campaigns2.default
+	});
+
+	exports.default = rootReducer;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.fetchUser = exports.authUser = undefined;
+
+	var _actions = __webpack_require__(275);
+
+	Object.defineProperty(exports, 'authUser', {
+	  enumerable: true,
+	  get: function get() {
+	    return _actions.authUser;
+	  }
+	});
+	Object.defineProperty(exports, 'fetchUser', {
+	  enumerable: true,
+	  get: function get() {
+	    return _actions.fetchUser;
+	  }
+	});
+
+	var _reducer = __webpack_require__(284);
+
+	var _reducer2 = _interopRequireDefault(_reducer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _reducer2.default;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _actions = __webpack_require__(275);
+
+	var initState = {
+	  loading: false,
+	  data: {},
+	  requestedPasscode: null
+	};
+
+	var reducer = function reducer() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
+	  var action = arguments[1];
+
+	  switch (action.type) {
+
+	    case _actions.AUTHENTICATING_USER:
+	    case _actions.FETCHING_USER:
+	      return _extends({}, state, { loading: true });
+
+	    case _actions.FETCHED_USER:
+	      return _extends({}, state, { loading: false, data: action.data.user });
+
+	    case _actions.REQUESTED_PASSCODE:
+	      return _extends({}, state, { requestedPasscode: action.id });
+
+	    default:
+	      return state;
+
+	  }
+	};
+
+	exports.default = reducer;
+
+/***/ },
+/* 285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _reducer = __webpack_require__(286);
+
+	var _reducer2 = _interopRequireDefault(_reducer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _reducer2.default;
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _actions = __webpack_require__(275);
+
+	var _actions2 = __webpack_require__(272);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var initState = {
+	  loading: false,
+	  data: []
+	};
+
+	var reducer = function reducer() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initState;
+	  var action = arguments[1];
+
+	  switch (action.type) {
+
+	    case _actions2.NEW_CAMPAIGN:
+	      return _extends({}, state, { data: [].concat(_toConsumableArray(state.data), [{ name: 'New Campaign' }]) });
+
+	    case _actions2.SAVING_CAMPAIGN:
+	    case _actions.FETCHING_USER:
+	      return _extends({}, state, { loading: true });
+
+	    case _actions.FETCHED_USER:
+	      return _extends({}, state, { loading: false, data: action.data.user.campaigns });
+
+	    case _actions2.SAVED_CAMPAIGN:
+	      return _extends({}, state, { loading: false, data: action.data.campaigns });
+
+	    default:
+	      return state;
+	  }
+	};
+
+	exports.default = reducer;
+
+/***/ },
+/* 287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _logger = __webpack_require__(288);
+
+	Object.defineProperty(exports, 'logger', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_logger).default;
+	  }
+	});
+
+	var _reduxThunk = __webpack_require__(289);
+
+	Object.defineProperty(exports, 'thunk', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_reduxThunk).default;
+	  }
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ },
+/* 288 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var logger = function logger(store) {
+	  return function (next) {
+	    return function (action) {
+	      console.group(action.type);
+	      console.info('dispatching', action);
+	      var result = next(action);
+	      console.log('next state', store.getState());
+	      console.groupEnd(action.type);
+	      return result;
+	    };
+	  };
+	};
+
+	exports.default = logger;
+
+/***/ },
+/* 289 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	function createThunkMiddleware(extraArgument) {
+	  return function (_ref) {
+	    var dispatch = _ref.dispatch,
+	        getState = _ref.getState;
+	    return function (next) {
+	      return function (action) {
+	        if (typeof action === 'function') {
+	          return action(dispatch, getState, extraArgument);
+	        }
+
+	        return next(action);
+	      };
+	    };
+	  };
+	}
+
+	var thunk = createThunkMiddleware();
+	thunk.withExtraArgument = createThunkMiddleware;
+
+	exports['default'] = thunk;
 
 /***/ }
 /******/ ]);

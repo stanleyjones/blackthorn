@@ -26,7 +26,8 @@
     "nodemailer": "^1.4.0",
     "nodemon": "^1.9.2",
     "passwordless": "^1.1.0",
-    "passwordless-mongostore": "^0.1.0"
+    "passwordless-mongostore": "^0.1.0",
+    "sendmail": "^1.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.8.0",

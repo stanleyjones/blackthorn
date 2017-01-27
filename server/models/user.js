@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 import { sign, verify } from 'jsonwebtoken';
 
 import { SECRET } from '../constants';
+import { sendPasscode } from '../express/mail';
 
 import { findAll, findOne, updateOne } from './helpers';
 import Campaign, { findCampaigns } from './campaign';
@@ -44,6 +45,11 @@ export const queryUser = {
   },
 };
 
+const getPasscode = length => new Array(length)
+  .fill(null)
+  .map(() => Math.floor(Math.random() * 10))
+  .join('');
+
 export const requestPasscode = {
   type: GraphQLID,
   args: {
@@ -53,7 +59,9 @@ export const requestPasscode = {
     const user = await findUser(args);
     if (!user) { return null; }
     const { _id } = user;
-    updateUser({ _id }, { passcode: '12345' });
+    const passcode = getPasscode(6);
+    updateUser({ _id }, { passcode });
+    sendPasscode(user.email, passcode);
     return _id;
   },
 };

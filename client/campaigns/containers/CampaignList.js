@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { newCampaign } from '../actions';
 import { fetchUser } from '../../user/actions';
@@ -13,7 +14,11 @@ class CampaignList extends Component {
     return (
       <div>
         <ul>
-          {this.props.campaigns.map((campaign, index) => <li key={index}>{campaign.name}</li>)}
+          {this.props.campaigns.map((campaign, index) => (
+            <li key={index}>
+              <Link to={`/campaigns/${campaign.id}`}>{campaign.name}</Link>
+            </li>
+          ))}
         </ul>
         <button onClick={this.props.newCampaign(this.props.userId)}>New Campaign</button>
       </div>
