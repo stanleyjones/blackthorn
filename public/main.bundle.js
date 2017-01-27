@@ -58,11 +58,11 @@
 
 	var _root2 = _interopRequireDefault(_root);
 
-	var _reducer = __webpack_require__(282);
+	var _reducer = __webpack_require__(283);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var _middleware = __webpack_require__(287);
+	var _middleware = __webpack_require__(288);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22556,11 +22556,11 @@
 
 	var _containers = __webpack_require__(270);
 
-	var _UserLogin = __webpack_require__(278);
+	var _UserLogin = __webpack_require__(279);
 
 	var _UserLogin2 = _interopRequireDefault(_UserLogin);
 
-	var _helpers = __webpack_require__(276);
+	var _helpers = __webpack_require__(277);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28728,7 +28728,7 @@
 	  }
 	});
 
-	var _CampaignShow = __webpack_require__(277);
+	var _CampaignShow = __webpack_require__(278);
 
 	Object.defineProperty(exports, 'CampaignShow', {
 	  enumerable: true,
@@ -28761,7 +28761,7 @@
 
 	var _actions = __webpack_require__(272);
 
-	var _actions2 = __webpack_require__(275);
+	var _actions2 = __webpack_require__(276);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28896,8 +28896,10 @@
 
 	__webpack_require__(274);
 
+	var _config = __webpack_require__(275);
+
 	var queryGraph = exports.queryGraph = function queryGraph(query) {
-	  return fetch('http://localhost:9000/ql', {
+	  return fetch(_config.host + ':' + _config.port + '/ql', {
 	    method: 'POST',
 	    headers: { 'Content-Type': 'application/graphql' },
 	    body: query
@@ -29381,6 +29383,34 @@
 /* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var env = process.env.NODE_ENV || 'development';
+
+	var config = {
+	  development: {
+	    host: 'http://localhost',
+	    mongodb: 'mongodb://localhost/blackthorn',
+	    port: 9000
+	  }
+	};
+
+	var _config$env = config[env];
+	var host = _config$env.host,
+	    mongodb = _config$env.mongodb,
+	    port = _config$env.port;
+	exports.host = host;
+	exports.mongodb = mongodb;
+	exports.port = port;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -29392,7 +29422,7 @@
 
 	var _helpers = __webpack_require__(273);
 
-	var _helpers2 = __webpack_require__(276);
+	var _helpers2 = __webpack_require__(277);
 
 	var AUTHENTICATING_USER = exports.AUTHENTICATING_USER = 'AUTHENTICATING_USER';
 	var AUTHENTICATED_USER = exports.AUTHENTICATED_USER = 'AUTHENTICATED_USER';
@@ -29445,7 +29475,7 @@
 	};
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29476,7 +29506,7 @@
 	};
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29495,7 +29525,7 @@
 
 	var _reactRouter = __webpack_require__(200);
 
-	var _actions = __webpack_require__(275);
+	var _actions = __webpack_require__(276);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29568,7 +29598,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignShow);
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29583,9 +29613,9 @@
 
 	var _reactRedux = __webpack_require__(255);
 
-	var _actions = __webpack_require__(275);
+	var _actions = __webpack_require__(276);
 
-	var _components = __webpack_require__(279);
+	var _components = __webpack_require__(280);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29619,7 +29649,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserLogin);
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29628,7 +29658,7 @@
 	  value: true
 	});
 
-	var _EnterPasscode = __webpack_require__(280);
+	var _EnterPasscode = __webpack_require__(281);
 
 	Object.defineProperty(exports, 'EnterPasscode', {
 	  enumerable: true,
@@ -29637,7 +29667,7 @@
 	  }
 	});
 
-	var _RequestPasscode = __webpack_require__(281);
+	var _RequestPasscode = __webpack_require__(282);
 
 	Object.defineProperty(exports, 'RequestPasscode', {
 	  enumerable: true,
@@ -29649,7 +29679,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29717,7 +29747,7 @@
 	exports.default = EnterPasscode;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29784,7 +29814,7 @@
 	exports.default = EmailForm;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29795,11 +29825,11 @@
 
 	var _redux = __webpack_require__(32);
 
-	var _user = __webpack_require__(283);
+	var _user = __webpack_require__(284);
 
 	var _user2 = _interopRequireDefault(_user);
 
-	var _campaigns = __webpack_require__(285);
+	var _campaigns = __webpack_require__(286);
 
 	var _campaigns2 = _interopRequireDefault(_campaigns);
 
@@ -29813,7 +29843,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29823,7 +29853,7 @@
 	});
 	exports.fetchUser = exports.authUser = undefined;
 
-	var _actions = __webpack_require__(275);
+	var _actions = __webpack_require__(276);
 
 	Object.defineProperty(exports, 'authUser', {
 	  enumerable: true,
@@ -29838,7 +29868,7 @@
 	  }
 	});
 
-	var _reducer = __webpack_require__(284);
+	var _reducer = __webpack_require__(285);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -29847,7 +29877,7 @@
 	exports.default = _reducer2.default;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29858,7 +29888,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _actions = __webpack_require__(275);
+	var _actions = __webpack_require__(276);
 
 	var initState = {
 	  loading: false,
@@ -29891,7 +29921,7 @@
 	exports.default = reducer;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29900,7 +29930,7 @@
 	  value: true
 	});
 
-	var _reducer = __webpack_require__(286);
+	var _reducer = __webpack_require__(287);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -29909,7 +29939,7 @@
 	exports.default = _reducer2.default;
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29920,7 +29950,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _actions = __webpack_require__(275);
+	var _actions = __webpack_require__(276);
 
 	var _actions2 = __webpack_require__(272);
 
@@ -29958,7 +29988,7 @@
 	exports.default = reducer;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29967,7 +29997,7 @@
 	  value: true
 	});
 
-	var _logger = __webpack_require__(288);
+	var _logger = __webpack_require__(289);
 
 	Object.defineProperty(exports, 'logger', {
 	  enumerable: true,
@@ -29976,7 +30006,7 @@
 	  }
 	});
 
-	var _reduxThunk = __webpack_require__(289);
+	var _reduxThunk = __webpack_require__(290);
 
 	Object.defineProperty(exports, 'thunk', {
 	  enumerable: true,
@@ -29988,7 +30018,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30012,7 +30042,7 @@
 	exports.default = logger;
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports) {
 
 	'use strict';

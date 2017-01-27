@@ -1,7 +1,9 @@
 import 'whatwg-fetch';
 
+import { host, port } from '../config';
+
 export const queryGraph = query =>
-  fetch('http://localhost:9000/ql', {
+  fetch(`${host}:${port}/ql`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/graphql' },
     body: query,
