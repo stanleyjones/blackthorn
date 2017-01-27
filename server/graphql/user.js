@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { sign, verify } from 'jsonwebtoken';
 
 import { SECRET } from '../constants';
-import { sendPasscode } from '../express/mail';
+import { sendPasscode } from '../mailer';
 
 import { findAll, findOne, updateOne } from './helpers';
 import Campaign, { findCampaigns } from './campaign';

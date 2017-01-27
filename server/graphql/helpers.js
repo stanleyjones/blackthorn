@@ -1,4 +1,4 @@
-import { connect } from '../mongodb';
+import { connect } from './mongodb';
 
 const promisify = operation => new Promise((resolve, reject) => {
   connect((err, db) => {

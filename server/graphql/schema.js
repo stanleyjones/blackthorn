@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 
-import { auth, queryUser, queryUsers, requestPasscode } from '../models/user';
-import { saveCampaign } from '../models/campaign';
+import { auth, queryUser, queryUsers, requestPasscode } from './user';
+import { saveCampaign } from './campaign';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
