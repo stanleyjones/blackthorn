@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Route, Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
-import { CampaignList, CampaignShow } from './campaigns/containers';
+import { CampaignEdit, CampaignList, CampaignShow } from './campaigns/containers';
 import UserLogin from './user/containers/UserLogin';
 import { authenticate, restorePath } from './user/helpers';
 
@@ -15,6 +15,7 @@ const Root = ({ store }) => (
       <Route path="/" component={CampaignList} onEnter={restorePath} />
       <Route path="/campaigns" component={CampaignList} onEnter={authenticate} />
       <Route path="/campaigns/:id" component={CampaignShow} onEnter={authenticate} />
+      <Route path="/campaigns/:id/edit" component={CampaignEdit} onEnter={authenticate} />
       <Route path="*" component={notFound} />
     </Router>
   </Provider>

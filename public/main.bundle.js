@@ -22584,6 +22584,7 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/', component: _containers.CampaignList, onEnter: _helpers.restorePath }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/campaigns', component: _containers.CampaignList, onEnter: _helpers.authenticate }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/campaigns/:id', component: _containers.CampaignShow, onEnter: _helpers.authenticate }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/campaigns/:id/edit', component: _containers.CampaignEdit, onEnter: _helpers.authenticate }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '*', component: notFound })
 	    )
 	  );
@@ -28719,6 +28720,15 @@
 	  value: true
 	});
 
+	var _CampaignEdit = __webpack_require__(291);
+
+	Object.defineProperty(exports, 'CampaignEdit', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_CampaignEdit).default;
+	  }
+	});
+
 	var _CampaignList = __webpack_require__(271);
 
 	Object.defineProperty(exports, 'CampaignList', {
@@ -29436,7 +29446,7 @@
 	var fetchUser = exports.fetchUser = function fetchUser() {
 	  return function (dispatch) {
 	    dispatch({ type: FETCHING_USER });
-	    (0, _helpers.queryGraph)('query {\n    user: queryUser(token: "' + (0, _helpers2.getToken)() + '") {\n      id: _id,\n      campaigns { id: _id, name },\n      name,\n    }\n  }').then(_helpers.parseResponse).then(function (json) {
+	    (0, _helpers.queryGraph)('query {\n    user: queryUser(token: "' + (0, _helpers2.getToken)() + '") {\n      id: _id,\n      campaigns { id: _id, name, userId },\n      name,\n    }\n  }').then(_helpers.parseResponse).then(function (json) {
 	      return dispatch({ type: FETCHED_USER, data: json.data });
 	    });
 	  };
@@ -29552,6 +29562,10 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _props = this.props,
+	          campaign = _props.campaign,
+	          userId = _props.userId;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -29563,8 +29577,21 @@
 	        _react2.default.createElement(
 	          _reactRouter.Link,
 	          { to: '/' },
-	          'Back'
-	        )
+	          _react2.default.createElement(
+	            'button',
+	            null,
+	            'Back'
+	          )
+	        ),
+	        userId === campaign.userId ? _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/campaigns/' + campaign.id + '/edit' },
+	          _react2.default.createElement(
+	            'button',
+	            null,
+	            'Edit'
+	          )
+	        ) : null
 	      );
 	    }
 	  }]);
@@ -30068,6 +30095,106 @@
 	thunk.withExtraArgument = createThunkMiddleware;
 
 	exports['default'] = thunk;
+
+/***/ },
+/* 291 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(255);
+
+	var _reactRouter = __webpack_require__(200);
+
+	var _actions = __webpack_require__(276);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CampaignEdit = function (_Component) {
+	  _inherits(CampaignEdit, _Component);
+
+	  function CampaignEdit() {
+	    _classCallCheck(this, CampaignEdit);
+
+	    return _possibleConstructorReturn(this, (CampaignEdit.__proto__ || Object.getPrototypeOf(CampaignEdit)).apply(this, arguments));
+	  }
+
+	  _createClass(CampaignEdit, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.fetchUser();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          campaign = _props.campaign,
+	          userId = _props.userId;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          this.props.campaign.name
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/campaigns/' + campaign.id },
+	          _react2.default.createElement(
+	            'button',
+	            null,
+	            'Done'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return CampaignEdit;
+	}(_react.Component);
+
+	CampaignEdit.propTypes = {
+	  campaign: _react.PropTypes.object,
+	  fetchUser: _react.PropTypes.func,
+	  userId: _react.PropTypes.string
+	};
+
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  return {
+	    campaign: state.campaigns.data.find(function (campaign) {
+	      return campaign.id === ownProps.params.id;
+	    }) || {},
+	    userId: state.user.data.id
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    fetchUser: function fetchUser() {
+	      return dispatch((0, _actions.fetchUser)());
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignEdit);
 
 /***/ }
 /******/ ]);

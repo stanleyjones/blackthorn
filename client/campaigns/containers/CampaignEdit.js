@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 
 import { fetchUser } from '../../user/actions';
 
-class CampaignShow extends Component {
+class CampaignEdit extends Component {
   componentDidMount() {
     this.props.fetchUser();
   }
@@ -14,17 +14,13 @@ class CampaignShow extends Component {
     return (
       <div>
         <h1>{this.props.campaign.name}</h1>
-        <Link to="/"><button>Back</button></Link>
-        {userId === campaign.userId
-          ? <Link to={`/campaigns/${campaign.id}/edit`}><button>Edit</button></Link>
-          : null
-        }
+        <Link to={`/campaigns/${campaign.id}`}><button>Done</button></Link>
       </div>
     );
   }
 }
 
-CampaignShow.propTypes = {
+CampaignEdit.propTypes = {
   campaign: PropTypes.object,
   fetchUser: PropTypes.func,
   userId: PropTypes.string,
@@ -39,4 +35,4 @@ const mapDispatchToProps = dispatch => ({
   fetchUser: () => dispatch(fetchUser()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CampaignShow);
+export default connect(mapStateToProps, mapDispatchToProps)(CampaignEdit);

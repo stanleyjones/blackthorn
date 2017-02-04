@@ -18,7 +18,7 @@ export const fetchUser = () => (dispatch) => {
   queryGraph(`query {
     user: queryUser(token: "${getToken()}") {
       id: _id,
-      campaigns { id: _id, name },
+      campaigns { id: _id, name, userId },
       name,
     }
   }`)
