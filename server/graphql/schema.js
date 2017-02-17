@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 
 import { auth, queryUser, queryUsers, requestPasscode } from './user';
-import { saveCampaign } from './campaign';
+import { deleteCampaign, saveCampaign } from './campaign';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -15,6 +15,7 @@ export default new GraphQLSchema({
     name: 'Mutation',
     fields: {
       auth,
+      deleteCampaign,
       requestPasscode,
       saveCampaign,
     },

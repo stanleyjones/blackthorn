@@ -1,11 +1,18 @@
 import React from 'react';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import { render } from 'react-dom';
 
 import Root from './root';
 import root from './reducer';
-import { logger, thunk } from './middleware';
+import { logger, redirect, thunk } from './middleware';
 
-const store = createStore(root, applyMiddleware(logger, thunk));
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable no-underscore-dangle */
+
+const store = createStore(
+  root,
+  composeEnhancers(applyMiddleware(logger, redirect, thunk)),
+);
 
 render(<Root store={store} />, document.getElementById('root'));

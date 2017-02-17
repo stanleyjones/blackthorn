@@ -58,15 +58,19 @@
 
 	var _root2 = _interopRequireDefault(_root);
 
-	var _reducer = __webpack_require__(283);
+	var _reducer = __webpack_require__(284);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var _middleware = __webpack_require__(288);
+	var _middleware = __webpack_require__(289);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var store = (0, _redux.createStore)(_reducer2.default, (0, _redux.applyMiddleware)(_middleware.logger, _middleware.thunk));
+	/* eslint-disable no-underscore-dangle */
+	var composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || _redux.compose;
+	/* eslint-enable no-underscore-dangle */
+
+	var store = (0, _redux.createStore)(_reducer2.default, composeEnhancers((0, _redux.applyMiddleware)(_middleware.logger, _middleware.redirect, _middleware.thunk)));
 
 	(0, _reactDom.render)(_react2.default.createElement(_root2.default, { store: store }), document.getElementById('root'));
 
@@ -22556,7 +22560,7 @@
 
 	var _containers = __webpack_require__(270);
 
-	var _UserLogin = __webpack_require__(279);
+	var _UserLogin = __webpack_require__(280);
 
 	var _UserLogin2 = _interopRequireDefault(_UserLogin);
 
@@ -28720,7 +28724,7 @@
 	  value: true
 	});
 
-	var _CampaignEdit = __webpack_require__(291);
+	var _CampaignEdit = __webpack_require__(271);
 
 	Object.defineProperty(exports, 'CampaignEdit', {
 	  enumerable: true,
@@ -28729,7 +28733,7 @@
 	  }
 	});
 
-	var _CampaignList = __webpack_require__(271);
+	var _CampaignList = __webpack_require__(278);
 
 	Object.defineProperty(exports, 'CampaignList', {
 	  enumerable: true,
@@ -28738,7 +28742,7 @@
 	  }
 	});
 
-	var _CampaignShow = __webpack_require__(278);
+	var _CampaignShow = __webpack_require__(279);
 
 	Object.defineProperty(exports, 'CampaignShow', {
 	  enumerable: true,
@@ -28781,16 +28785,16 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var CampaignList = function (_Component) {
-	  _inherits(CampaignList, _Component);
+	var CampaignEdit = function (_Component) {
+	  _inherits(CampaignEdit, _Component);
 
-	  function CampaignList() {
-	    _classCallCheck(this, CampaignList);
+	  function CampaignEdit() {
+	    _classCallCheck(this, CampaignEdit);
 
-	    return _possibleConstructorReturn(this, (CampaignList.__proto__ || Object.getPrototypeOf(CampaignList)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (CampaignEdit.__proto__ || Object.getPrototypeOf(CampaignEdit)).apply(this, arguments));
 	  }
 
-	  _createClass(CampaignList, [{
+	  _createClass(CampaignEdit, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.props.fetchUser();
@@ -28798,64 +28802,85 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _props = this.props,
+	          campaign = _props.campaign,
+	          deleteCampaign = _props.deleteCampaign,
+	          editCampaign = _props.editCampaign,
+	          saveCampaign = _props.saveCampaign,
+	          userId = _props.userId;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        _react2.default.createElement('input', { name: 'name', onChange: editCampaign(campaign.id), value: campaign.name }),
 	        _react2.default.createElement(
-	          'ul',
-	          null,
-	          this.props.campaigns.map(function (campaign, index) {
-	            return _react2.default.createElement(
-	              'li',
-	              { key: index },
-	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: '/campaigns/' + campaign.id },
-	                campaign.name
-	              )
-	            );
-	          })
+	          'button',
+	          { onClick: saveCampaign(userId, campaign) },
+	          'Save'
 	        ),
 	        _react2.default.createElement(
 	          'button',
-	          { onClick: this.props.newCampaign(this.props.userId) },
-	          'New Campaign'
+	          { onClick: deleteCampaign(userId, campaign.id) },
+	          'Delete'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/campaigns/' + campaign.id },
+	          _react2.default.createElement(
+	            'button',
+	            null,
+	            'Cancel'
+	          )
 	        )
 	      );
 	    }
 	  }]);
 
-	  return CampaignList;
+	  return CampaignEdit;
 	}(_react.Component);
 
-	CampaignList.propTypes = {
-	  campaigns: _react.PropTypes.array,
+	CampaignEdit.propTypes = {
+	  campaign: _react.PropTypes.object,
+	  deleteCampaign: _react.PropTypes.func,
+	  editCampaign: _react.PropTypes.func,
 	  fetchUser: _react.PropTypes.func,
-	  newCampaign: _react.PropTypes.func,
+	  saveCampaign: _react.PropTypes.func,
 	  userId: _react.PropTypes.string
 	};
 
-	var mapStateToProps = function mapStateToProps(state) {
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
 	  return {
-	    campaigns: state.campaigns.data,
+	    campaign: state.campaigns.data.find(function (campaign) {
+	      return campaign.id === ownProps.params.id;
+	    }) || {},
 	    userId: state.user.data.id
 	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
+	    deleteCampaign: function deleteCampaign(userId, campaignId) {
+	      return function () {
+	        return dispatch((0, _actions.deleteCampaign)(userId, campaignId));
+	      };
+	    },
+	    editCampaign: function editCampaign(campaignId) {
+	      return function (e) {
+	        return dispatch((0, _actions.editCampaign)(e, campaignId));
+	      };
+	    },
 	    fetchUser: function fetchUser() {
 	      return dispatch((0, _actions2.fetchUser)());
 	    },
-	    newCampaign: function newCampaign(userId) {
+	    saveCampaign: function saveCampaign(userId, attrs) {
 	      return function () {
-	        return dispatch((0, _actions.newCampaign)(userId));
+	        return dispatch((0, _actions.saveCampaign)(userId, attrs));
 	      };
 	    }
 	  };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignList);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignEdit);
 
 /***/ },
 /* 272 */
@@ -28866,10 +28891,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.newCampaign = exports.saveCampaign = exports.SAVED_CAMPAIGN = exports.SAVING_CAMPAIGN = undefined;
+	exports.newCampaign = exports.deleteCampaign = exports.saveCampaign = exports.editCampaign = exports.SAVED_CAMPAIGN = exports.SAVING_CAMPAIGN = exports.DELETED_CAMPAIGN = exports.DELETING_CAMPAIGN = exports.EDIT_CAMPAIGN = undefined;
 
 	var _helpers = __webpack_require__(273);
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var EDIT_CAMPAIGN = exports.EDIT_CAMPAIGN = 'EDIT_CAMPAIGN';
+	var DELETING_CAMPAIGN = exports.DELETING_CAMPAIGN = 'DELETING_CAMPAIGN';
+	var DELETED_CAMPAIGN = exports.DELETED_CAMPAIGN = 'DELETED_CAMPAIGN';
 	var SAVING_CAMPAIGN = exports.SAVING_CAMPAIGN = 'SAVING_CAMPAIGN';
 	var SAVED_CAMPAIGN = exports.SAVED_CAMPAIGN = 'SAVED_CAMPAIGN';
 
@@ -28877,14 +28907,32 @@
 	  name: 'New Campaign'
 	};
 
+	var editCampaign = exports.editCampaign = function editCampaign(e, id) {
+	  var _ref = e.target || e,
+	      name = _ref.name,
+	      value = _ref.value;
+
+	  return { type: EDIT_CAMPAIGN, attrs: _defineProperty({}, name, value), id: id };
+	};
+
 	var saveCampaign = exports.saveCampaign = function saveCampaign(userId, attrs) {
 	  return function (dispatch) {
 	    dispatch({ type: SAVING_CAMPAIGN });
-	    var _id = attrs._id,
+	    var id = attrs.id,
 	        name = attrs.name;
 
-	    (0, _helpers.queryGraph)('mutation {\n    campaigns: saveCampaign(input: {\n      _id: "' + (_id || '') + '",\n      name: "' + name + '",\n      userId: "' + userId + '",\n    }) { id: _id, name }\n  }').then(_helpers.parseResponse).then(function (json) {
-	      return dispatch({ type: SAVED_CAMPAIGN, data: json.data });
+	    var redirect = id ? '/campaigns/' + id : null;
+	    (0, _helpers.queryGraph)('mutation {\n    campaigns: saveCampaign(input: {\n      ' + (id ? '_id: "' + id + '"' : '') + '\n      name: "' + name + '",\n      userId: "' + userId + '",\n    }) { id: _id, name }\n  }').then(_helpers.parseResponse).then(function (json) {
+	      return dispatch({ type: SAVED_CAMPAIGN, data: json.data, redirect: redirect });
+	    });
+	  };
+	};
+
+	var deleteCampaign = exports.deleteCampaign = function deleteCampaign(userId, id) {
+	  return function (dispatch) {
+	    dispatch({ type: DELETING_CAMPAIGN });
+	    (0, _helpers.queryGraph)('mutation {\n    campaigns: deleteCampaign(input: {\n      _id: "' + id + '",\n      userId: "' + userId + '",\n    }) { id: _id, name }\n  }').then(_helpers.parseResponse).then(function (json) {
+	      return dispatch({ type: DELETED_CAMPAIGN, data: json.data, redirect: '/campaigns' });
 	    });
 	  };
 	};
@@ -29535,6 +29583,114 @@
 
 	var _reactRouter = __webpack_require__(200);
 
+	var _actions = __webpack_require__(272);
+
+	var _actions2 = __webpack_require__(276);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CampaignList = function (_Component) {
+	  _inherits(CampaignList, _Component);
+
+	  function CampaignList() {
+	    _classCallCheck(this, CampaignList);
+
+	    return _possibleConstructorReturn(this, (CampaignList.__proto__ || Object.getPrototypeOf(CampaignList)).apply(this, arguments));
+	  }
+
+	  _createClass(CampaignList, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.fetchUser();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          this.props.campaigns.map(function (campaign, index) {
+	            return _react2.default.createElement(
+	              'li',
+	              { key: index },
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/campaigns/' + campaign.id },
+	                campaign.name
+	              )
+	            );
+	          })
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.props.newCampaign(this.props.userId) },
+	          'New Campaign'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return CampaignList;
+	}(_react.Component);
+
+	CampaignList.propTypes = {
+	  campaigns: _react.PropTypes.array,
+	  fetchUser: _react.PropTypes.func,
+	  newCampaign: _react.PropTypes.func,
+	  userId: _react.PropTypes.string
+	};
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    campaigns: state.campaigns.data,
+	    userId: state.user.data.id
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    fetchUser: function fetchUser() {
+	      return dispatch((0, _actions2.fetchUser)());
+	    },
+	    newCampaign: function newCampaign(userId) {
+	      return function () {
+	        return dispatch((0, _actions.newCampaign)(userId));
+	      };
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignList);
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(255);
+
+	var _reactRouter = __webpack_require__(200);
+
 	var _actions = __webpack_require__(276);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -29606,6 +29762,7 @@
 	};
 
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  console.log(state);
 	  return {
 	    campaign: state.campaigns.data.find(function (campaign) {
 	      return campaign.id === ownProps.params.id;
@@ -29625,7 +29782,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignShow);
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29642,7 +29799,7 @@
 
 	var _actions = __webpack_require__(276);
 
-	var _components = __webpack_require__(280);
+	var _components = __webpack_require__(281);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29676,7 +29833,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserLogin);
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29685,7 +29842,7 @@
 	  value: true
 	});
 
-	var _EnterPasscode = __webpack_require__(281);
+	var _EnterPasscode = __webpack_require__(282);
 
 	Object.defineProperty(exports, 'EnterPasscode', {
 	  enumerable: true,
@@ -29694,7 +29851,7 @@
 	  }
 	});
 
-	var _RequestPasscode = __webpack_require__(282);
+	var _RequestPasscode = __webpack_require__(283);
 
 	Object.defineProperty(exports, 'RequestPasscode', {
 	  enumerable: true,
@@ -29706,7 +29863,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29774,7 +29931,7 @@
 	exports.default = EnterPasscode;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29841,7 +29998,7 @@
 	exports.default = EmailForm;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29852,11 +30009,11 @@
 
 	var _redux = __webpack_require__(32);
 
-	var _user = __webpack_require__(284);
+	var _user = __webpack_require__(285);
 
 	var _user2 = _interopRequireDefault(_user);
 
-	var _campaigns = __webpack_require__(286);
+	var _campaigns = __webpack_require__(287);
 
 	var _campaigns2 = _interopRequireDefault(_campaigns);
 
@@ -29870,7 +30027,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29895,7 +30052,7 @@
 	  }
 	});
 
-	var _reducer = __webpack_require__(285);
+	var _reducer = __webpack_require__(286);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -29904,7 +30061,7 @@
 	exports.default = _reducer2.default;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29948,7 +30105,7 @@
 	exports.default = reducer;
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29957,7 +30114,7 @@
 	  value: true
 	});
 
-	var _reducer = __webpack_require__(287);
+	var _reducer = __webpack_require__(288);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
@@ -29966,7 +30123,7 @@
 	exports.default = _reducer2.default;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29994,16 +30151,28 @@
 
 	  switch (action.type) {
 
+	    case _actions2.EDIT_CAMPAIGN:
+	      {
+	        var campaignIndex = state.data.findIndex(function (campaign) {
+	          return campaign.id === action.id;
+	        });
+	        var campaigns = [].concat(_toConsumableArray(state.data));
+	        campaigns[campaignIndex] = _extends({}, campaigns[campaignIndex], action.attrs);
+	        return _extends({}, state, { data: campaigns });
+	      }
+
 	    case _actions2.NEW_CAMPAIGN:
 	      return _extends({}, state, { data: [].concat(_toConsumableArray(state.data), [{ name: 'New Campaign' }]) });
 
-	    case _actions2.SAVING_CAMPAIGN:
+	    case _actions2.DELETING_CAMPAIGN:
 	    case _actions.FETCHING_USER:
+	    case _actions2.SAVING_CAMPAIGN:
 	      return _extends({}, state, { loading: true });
 
 	    case _actions.FETCHED_USER:
 	      return _extends({}, state, { loading: false, data: action.data.user.campaigns });
 
+	    case _actions2.DELETED_CAMPAIGN:
 	    case _actions2.SAVED_CAMPAIGN:
 	      return _extends({}, state, { loading: false, data: action.data.campaigns });
 
@@ -30015,7 +30184,7 @@
 	exports.default = reducer;
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30024,7 +30193,7 @@
 	  value: true
 	});
 
-	var _logger = __webpack_require__(289);
+	var _logger = __webpack_require__(290);
 
 	Object.defineProperty(exports, 'logger', {
 	  enumerable: true,
@@ -30033,7 +30202,16 @@
 	  }
 	});
 
-	var _reduxThunk = __webpack_require__(290);
+	var _redirect = __webpack_require__(292);
+
+	Object.defineProperty(exports, 'redirect', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_redirect).default;
+	  }
+	});
+
+	var _reduxThunk = __webpack_require__(291);
 
 	Object.defineProperty(exports, 'thunk', {
 	  enumerable: true,
@@ -30045,7 +30223,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30069,7 +30247,7 @@
 	exports.default = logger;
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30097,7 +30275,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30106,95 +30284,20 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(255);
-
 	var _reactRouter = __webpack_require__(200);
 
-	var _actions = __webpack_require__(276);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var CampaignEdit = function (_Component) {
-	  _inherits(CampaignEdit, _Component);
-
-	  function CampaignEdit() {
-	    _classCallCheck(this, CampaignEdit);
-
-	    return _possibleConstructorReturn(this, (CampaignEdit.__proto__ || Object.getPrototypeOf(CampaignEdit)).apply(this, arguments));
-	  }
-
-	  _createClass(CampaignEdit, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.props.fetchUser();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props,
-	          campaign = _props.campaign,
-	          userId = _props.userId;
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          this.props.campaign.name
-	        ),
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/campaigns/' + campaign.id },
-	          _react2.default.createElement(
-	            'button',
-	            null,
-	            'Done'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return CampaignEdit;
-	}(_react.Component);
-
-	CampaignEdit.propTypes = {
-	  campaign: _react.PropTypes.object,
-	  fetchUser: _react.PropTypes.func,
-	  userId: _react.PropTypes.string
-	};
-
-	var mapStateToProps = function mapStateToProps(state, ownProps) {
-	  return {
-	    campaign: state.campaigns.data.find(function (campaign) {
-	      return campaign.id === ownProps.params.id;
-	    }) || {},
-	    userId: state.user.data.id
+	var redirect = function redirect() {
+	  return function (next) {
+	    return function (action) {
+	      if (action.redirect) {
+	        _reactRouter.browserHistory.push(action.redirect);
+	      }
+	      return next(action);
+	    };
 	  };
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    fetchUser: function fetchUser() {
-	      return dispatch((0, _actions.fetchUser)());
-	    }
-	  };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CampaignEdit);
+	exports.default = redirect;
 
 /***/ }
 /******/ ]);

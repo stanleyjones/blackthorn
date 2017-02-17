@@ -43,3 +43,12 @@ export const updateOne = (collection, query, doc) => promisify((db, resolve) => 
       resolve(value);
     });
 });
+
+export const removeOne = (collection, query) => promisify((db, resolve) => {
+  db.collection(collection)
+    .remove(query, { justOne: true })
+    .then(result => {
+      db.close();
+      resolve(result);
+    });
+});
