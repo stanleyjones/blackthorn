@@ -40,7 +40,7 @@ const reducer = (state = initState, action) => {
 
     case DELETED_CAMPAIGN:
     case SAVED_CAMPAIGN:
-      return { ... state, loading: false, data: action.data.campaigns };
+      return { ...state, loading: false, data: action.data.campaigns };
 
     default:
       return state;

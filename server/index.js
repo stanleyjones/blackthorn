@@ -1,21 +1,29 @@
+import cors from 'cors';
 import express from 'express';
 import graphql from 'express-graphql';
 import path from 'path';
 import { text } from 'body-parser';
 
-import { host, port } from '../config';
-
+import config from '../config';
 import { schema } from './graphql';
 
 const app = express();
+const { host, port } = config[process.env.NODE_ENV || 'development'];
 
 // GraphQL
 app.use(text({ type: 'application/graphql' }));
-app.use('/ql', graphql({ schema, pretty: true }));
+app.use('/ql', cors(), graphql({ schema, pretty: true }));
 
 // Static Server
-app.get(/.*\.js/, express.static('public'));
-app.get('*', (req, res) => { res.sendFile(path.resolve(__dirname, '../public/index.html')); });
+if (process.env.NODE_ENV !== 'development') {
+  app.get(/.*\.js/, express.static('public'));
+  app.get('*', (req, res) => { res.sendFile(path.resolve(__dirname, '../public/index.html')); });
+}
 
 app.listen(port);
-console.log(`listening: ${host}:${port}`);
+
+console.log(`
+The API is running at:
+
+  ${host}:${port}/
+`);

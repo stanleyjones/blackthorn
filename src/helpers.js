@@ -1,9 +1,7 @@
 import 'whatwg-fetch';
 
-import { host, port } from '../config';
-
 export const queryGraph = query =>
-  fetch(`${host}:${port}/ql`, {
+  fetch(`${process.env.REACT_APP_API}/ql`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/graphql' },
     body: query,

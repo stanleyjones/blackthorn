@@ -15,4 +15,10 @@ const store = createStore(
   composeEnhancers(applyMiddleware(logger, redirect, thunk)),
 );
 
+if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
+  navigator.serviceWorker.register('./service-worker.js')
+    .then((reg) => { console.info('Registered ServiceWorker', reg); })
+    .catch((err) => { console.error('Error registering ServiceWorker', err); });
+}
+
 render(<Root store={store} />, document.getElementById('root'));
