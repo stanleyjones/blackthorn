@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "build": "react-scripts build",
-    "eject": "react-scripts eject",
-    "prestart": "nodemon server --exec babel-node &",
     "seed": "babel-node ./bin/seed_database",
-    "start": "react-scripts start",
+    "start": "npm run start:client & npm run start:server",
+    "start:client": "if test \"$NODE_ENV\" != \"production\"; then react-scripts start; fi",
+    "start:server": "nodemon server --exec babel-node",
     "test": "react-scripts test --env=jsdom"
   },
   "dependencies": {

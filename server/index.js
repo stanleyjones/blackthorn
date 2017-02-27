@@ -16,8 +16,8 @@ app.use('/ql', cors(), graphql({ schema, pretty: true }));
 
 // Static Server
 if (process.env.NODE_ENV !== 'development') {
-  app.get(/.*\.js/, express.static('public'));
-  app.get('*', (req, res) => { res.sendFile(path.resolve(__dirname, '../public/index.html')); });
+  app.use(express.static('./build'));
+  app.get('/*', (req, res) => { res.sendFile(path.join(__dirname, '../build', 'index.html')); });
 }
 
 app.listen(port);
