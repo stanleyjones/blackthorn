@@ -21,10 +21,4 @@ if (process.env.NODE_ENV !== 'development') {
   app.get('/*', (req, res) => { res.sendFile(path.join(__dirname, '../build', 'index.html')); });
 }
 
-app.listen(process.env.SERVER_PORT);
-
-console.log(`
-The API is running at:
-
-  ${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/
-`);
+app.listen(process.env.API_PORT);
