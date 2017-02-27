@@ -4,11 +4,11 @@ import graphql from 'express-graphql';
 import path from 'path';
 import { text } from 'body-parser';
 
-import config from '../config';
+import getConfig from '../src/config';
 import { schema } from './graphql';
 
 const app = express();
-const { host, port } = config[process.env.NODE_ENV || 'development'];
+const { host, port } = getConfig();
 
 // GraphQL
 app.use(text({ type: 'application/graphql' }));

@@ -1,6 +1,6 @@
 import { MongoClient as client } from 'mongodb';
 
-import config from '../../config';
+import getConfig from '../../src/config';
 
-const { mongodb } = config[process.env.NODE_ENV || 'development'];
+const { mongodb } = getConfig();
 export const connect = cb => client.connect(mongodb, cb);
