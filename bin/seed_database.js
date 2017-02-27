@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { connect } from '../server/mongodb';
+import connect from '../server/mongodb';
 
 const rootUser = {
   admin: true,
@@ -15,10 +15,10 @@ connect((err, db) => {
     { email: rootUser.email },
     { $set: rootUser },
     { upsert: true },
-    seedErr => {
+    (seedErr) => {
       if (seedErr) { console.error('Error seeding database:', err); return; }
       db.close();
       console.log('Done.');
-    }
+    },
   );
 });

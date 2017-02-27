@@ -2,13 +2,14 @@ import cors from 'cors';
 import express from 'express';
 import graphql from 'express-graphql';
 import path from 'path';
+import { config } from 'dotenv';
 import { text } from 'body-parser';
 
-import getConfig from '../src/config';
 import { schema } from './graphql';
 
+config();
+
 const app = express();
-const { host, port } = getConfig();
 
 // GraphQL
 app.use(text({ type: 'application/graphql' }));
@@ -20,10 +21,10 @@ if (process.env.NODE_ENV !== 'development') {
   app.get('/*', (req, res) => { res.sendFile(path.join(__dirname, '../build', 'index.html')); });
 }
 
-app.listen(port);
+app.listen(process.env.PORT);
 
 console.log(`
 The API is running at:
 
-  ${host}:${port}/
+  ${process.env.HOST}:${process.env.PORT}/
 `);
