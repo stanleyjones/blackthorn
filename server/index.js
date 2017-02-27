@@ -21,4 +21,4 @@ if (process.env.NODE_ENV !== 'development') {
   app.get('/*', (req, res) => { res.sendFile(path.join(__dirname, '../build', 'index.html')); });
 }
 
-app.listen(process.env.API_PORT);
+app.listen(Number(process.env.API_PORT));
