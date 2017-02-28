@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 
-import { auth, queryUser, queryUsers, requestPasscode } from './user';
+import { auth, inviteUser, queryUser, queryUsers, requestPasscode } from './user';
 import { deleteCampaign, saveCampaign } from './campaign';
 
 export default new GraphQLSchema({
@@ -16,6 +16,7 @@ export default new GraphQLSchema({
     fields: {
       auth,
       deleteCampaign,
+      inviteUser,
       requestPasscode,
       saveCampaign,
     },

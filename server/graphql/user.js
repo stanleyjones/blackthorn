@@ -5,21 +5,22 @@ import { sign, verify } from 'jsonwebtoken';
 import { SECRET } from '../constants';
 import { sendPasscode } from '../mailer';
 
-import { findAll, findOne, updateOne } from './helpers';
-import Campaign, { findCampaigns } from './campaign';
+import { findAll, findOne, insertOne, updateOne } from './helpers';
+import Campaign, { findCampaign, findCampaigns, updateCampaign } from './campaign';
 
 export const findUsers = query => findAll('users', query);
 export const findUser = query => findOne('users', query);
+export const insertUser = doc => insertOne('users', doc);
 export const updateUser = (query, doc) => updateOne('users', query, doc);
 
-const User = new GraphQLObjectType({
+export const User = new GraphQLObjectType({
   name: 'User',
   fields: {
     _id: { type: GraphQLID },
     admin: { type: GraphQLBoolean },
     campaigns: {
       type: new GraphQLList(Campaign),
-      resolve: ({ _id }) => findCampaigns({ userId: _id }),
+      resolve: ({ _id }) => findCampaigns({ $or: [{ userId: _id }, { playerIds: _id }] }),
     },
     email: { type: GraphQLString },
     name: { type: GraphQLString },
@@ -85,5 +86,23 @@ export const auth = {
     const user = await findUser({ _id: new ObjectId(_id), passcode });
     if (user) { return { token: sign({ ...user }, SECRET) }; }
     return { error: 'user_not_found' };
+  },
+};
+
+export const inviteUser = {
+  type: User,
+  args: {
+    email: { type: GraphQLString },
+    campaignId: { type: GraphQLID },
+  },
+  resolve: async (_, args) => {
+    const { campaignId, email } = args;
+    let player = await findUser({ email });
+    if (!player) { player = await insertUser({ email }); }
+    if (campaignId) {
+      const { playerIds } = await findCampaign({ _id: new ObjectId(campaignId) });
+      updateCampaign({ _id: new ObjectId(campaignId) }, { playerIds: [...playerIds, player._id] });
+    }
+    return player;
   },
 };

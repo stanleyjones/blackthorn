@@ -8,6 +8,7 @@ import {
 import { ObjectId } from 'mongodb';
 
 import { findAll, findOne, insertOne, updateOne, removeOne } from './helpers';
+import { findUsers, User } from './user';
 
 export const findCampaigns = query => findAll('campaigns', query);
 export const findCampaign = query => findOne('campaigns', query);
@@ -20,27 +21,32 @@ const Campaign = new GraphQLObjectType({
   fields: {
     _id: { type: GraphQLID },
     name: { type: GraphQLString },
-    userId: { type: GraphQLID },
-  },
-});
-
-const CampaignInput = new GraphQLInputObjectType({
-  name: 'CampaignInput',
-  fields: {
-    _id: { type: GraphQLID },
-    name: { type: GraphQLString },
+    players: {
+      type: new GraphQLList(User),
+      resolve: ({ playerIds }) => findUsers({ _id: { $in: playerIds } }),
+    },
     userId: { type: GraphQLID },
   },
 });
 
 export default Campaign;
 
+const CampaignInput = new GraphQLInputObjectType({
+  name: 'CampaignInput',
+  fields: {
+    _id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    playerIds: { type: new GraphQLList(GraphQLID) },
+    userId: { type: GraphQLID },
+  },
+});
+
 export const saveCampaign = {
   type: new GraphQLList(Campaign),
   args: {
     input: { type: CampaignInput },
   },
-  resolve: (_, args) => {
+  resolve: async (_, args) => {
     const { _id, ...attrs } = args.input;
     const campaignId = new ObjectId(_id);
     const userId = new ObjectId(attrs.userId);
