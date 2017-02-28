@@ -8,7 +8,7 @@ import {
 import { ObjectId } from 'mongodb';
 
 import { findAll, findOne, insertOne, updateOne, removeOne } from './helpers';
-import { findUsers, User } from './user';
+import User, { findUsers } from './user';
 
 export const findCampaigns = query => findAll('campaigns', query);
 export const findCampaign = query => findOne('campaigns', query);
@@ -21,10 +21,10 @@ const Campaign = new GraphQLObjectType({
   fields: {
     _id: { type: GraphQLID },
     name: { type: GraphQLString },
-    players: {
-      type: new GraphQLList(User),
-      resolve: ({ playerIds }) => findUsers({ _id: { $in: playerIds } }),
-    },
+    // players: {
+    //   type: new GraphQLList(User),
+    //   resolve: ({ playerIds }) => findUsers({ _id: { $in: playerIds } }),
+    // },
     userId: { type: GraphQLID },
   },
 });

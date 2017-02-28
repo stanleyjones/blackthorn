@@ -13,7 +13,7 @@ export const findUser = query => findOne('users', query);
 export const insertUser = doc => insertOne('users', doc);
 export const updateUser = (query, doc) => updateOne('users', query, doc);
 
-export const User = new GraphQLObjectType({
+const User = new GraphQLObjectType({
   name: 'User',
   fields: {
     _id: { type: GraphQLID },
@@ -26,6 +26,8 @@ export const User = new GraphQLObjectType({
     name: { type: GraphQLString },
   },
 });
+
+export default User;
 
 export const queryUsers = {
   type: new GraphQLList(User),
@@ -100,7 +102,7 @@ export const inviteUser = {
     let player = await findUser({ email });
     if (!player) { player = await insertUser({ email }); }
     if (campaignId) {
-      const { playerIds } = await findCampaign({ _id: new ObjectId(campaignId) });
+      const { playerIds = [] } = await findCampaign({ _id: new ObjectId(campaignId) });
       updateCampaign({ _id: new ObjectId(campaignId) }, { playerIds: [...playerIds, player._id] });
     }
     return player;
