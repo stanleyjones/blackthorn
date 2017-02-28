@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
-import user from './user';
-import campaigns from './campaigns';
+import campaigns from '../campaigns';
+import user from '../user';
 
 const rootReducer = combineReducers({
-  user,
   campaigns,
+  user,
 });
 
 export default rootReducer;

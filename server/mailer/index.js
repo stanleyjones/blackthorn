@@ -1,4 +1,7 @@
 import { createTransport } from 'nodemailer';
+import { config } from 'dotenv';
+
+config();
 
 const transport = createTransport({
   service: process.env.MAIL_SERVICE,

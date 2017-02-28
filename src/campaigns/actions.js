@@ -1,4 +1,4 @@
-import { queryGraph } from '../helpers';
+import { queryGraph } from '../shared/helpers';
 
 export const EDIT_CAMPAIGN = 'EDIT_CAMPAIGN';
 export const DELETING_CAMPAIGN = 'DELETING_CAMPAIGN';
@@ -37,10 +37,10 @@ export const saveCampaign = (userId, attrs) => async (dispatch) => {
   }
 };
 
-export const deleteCampaign = (userId, id) => (dispatch) => {
+export const deleteCampaign = (userId, id) => async (dispatch) => {
   dispatch({ type: DELETING_CAMPAIGN });
   try {
-    const { data } = queryGraph(`
+    const { data } = await queryGraph(`
       mutation {
         campaigns: deleteCampaign(input: {
           _id: "${id}",

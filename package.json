@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "build": "react-scripts build",
-    "seed": "babel-node ./bin/seed_database",
-    "start": "npm run start:client & npm run start:server",
-    "start:client": "if test \"$NODE_ENV\" != \"production\"; then react-scripts start; fi",
-    "start:server": "nodemon server --exec babel-node",
+    "postbuild": "sw-precache --root=\"build/\" --static-file-globs=\"build/**/!(*map*)\"",
+    "prestart": "nodemon server --exec babel-node &",
+    "seed": "babel-node ./bin/seedDatabase",
+    "start": "if test \"$NODE_ENV\" != \"production\"; then react-scripts start; fi",
     "test": "react-scripts test --env=jsdom"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "react-scripts": "^0.9.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
+    "sw-precache": "^5.0.0",
     "whatwg-fetch": "^2.0.2"
   },
   "babel": {

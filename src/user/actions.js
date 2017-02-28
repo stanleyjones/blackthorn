@@ -1,4 +1,4 @@
-import { queryGraph } from '../helpers';
+import { queryGraph } from '../shared/helpers';
 
 import { clearToken, getToken, setToken } from './helpers';
 
@@ -12,10 +12,10 @@ export const REQUESTING_PASSCODE = 'REQUESTING_PASSCODE';
 export const REQUESTED_PASSCODE = 'REQUESTED_PASSCODE';
 export const REQUEST_FAILED = 'REQUEST_FAILED';
 
-export const fetchUser = () => (dispatch) => {
+export const fetchUser = () => async (dispatch) => {
   dispatch({ type: FETCHING_USER });
   try {
-    const { data } = queryGraph(`
+    const { data } = await queryGraph(`
       query {
         user: queryUser(token: "${getToken()}") {
           id: _id,
@@ -30,10 +30,10 @@ export const fetchUser = () => (dispatch) => {
   }
 };
 
-export const requestPasscode = email => (dispatch) => {
+export const requestPasscode = email => async (dispatch) => {
   dispatch({ type: REQUESTING_PASSCODE });
   try {
-    const { data: { id } } = queryGraph(`
+    const { data: { id } } = await queryGraph(`
       mutation {
         id: requestPasscode(email: "${email}")
       }
@@ -45,10 +45,10 @@ export const requestPasscode = email => (dispatch) => {
   }
 };
 
-export const authUser = (id, passcode) => (dispatch) => {
+export const authUser = (id, passcode) => async (dispatch) => {
   dispatch({ type: AUTHENTICATING_USER });
   try {
-    const { data: { auth: { token } } } = queryGraph(`
+    const { data: { auth: { token } } } = await queryGraph(`
       mutation {
         auth(id: "${id}", passcode: "${passcode}") { error, token }
       }

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import connect from '../server/mongodb';
+import { connect } from '../server/mongodb';
 
 const rootUser = {
   admin: true,
