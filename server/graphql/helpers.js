@@ -31,6 +31,7 @@ export const insertOne = (collection, doc) => promisify((db, resolve) => {
     .insertOne(doc)
     .then(result => {
       db.close();
+      // TODO: should return new document
       resolve(result);
     });
 });

@@ -1,12 +1,12 @@
-import { FETCHING_USER, FETCHED_USER } from '../user/actions';
+import { FETCH as FETCH_USER, FETCH_SUCCESS as FETCH_USER_SUCCESS } from '../user/actions';
 
 import {
-  DELETING_CAMPAIGN,
-  DELETED_CAMPAIGN,
-  EDIT_CAMPAIGN,
-  NEW_CAMPAIGN,
-  SAVING_CAMPAIGN,
-  SAVED_CAMPAIGN,
+  DELETE,
+  DELETE_SUCCESS,
+  EDIT,
+  NEW,
+  SAVE_SUCCESS,
+  SAVE,
 } from './actions';
 
 const initState = {
@@ -17,7 +17,7 @@ const initState = {
 const reducer = (state = initState, action) => {
   switch (action.type) {
 
-    case EDIT_CAMPAIGN: {
+    case EDIT: {
       const campaignIndex = state.data.findIndex(campaign => campaign.id === action.id);
       const campaigns = [...state.data];
       campaigns[campaignIndex] = {
@@ -27,19 +27,19 @@ const reducer = (state = initState, action) => {
       return { ...state, data: campaigns };
     }
 
-    case NEW_CAMPAIGN:
+    case NEW:
       return { ...state, data: [...state.data, { name: 'New Campaign' }] };
 
-    case DELETING_CAMPAIGN:
-    case FETCHING_USER:
-    case SAVING_CAMPAIGN:
+    case DELETE:
+    case FETCH_USER:
+    case SAVE:
       return { ...state, loading: true };
 
-    case FETCHED_USER:
+    case FETCH_USER_SUCCESS:
       return { ...state, loading: false, data: action.data.user.campaigns };
 
-    case DELETED_CAMPAIGN:
-    case SAVED_CAMPAIGN:
+    case DELETE_SUCCESS:
+    case SAVE_SUCCESS:
       return { ...state, loading: false, data: action.data.campaigns };
 
     default:

@@ -1,8 +1,8 @@
 import {
-  AUTHENTICATING_USER,
-  FETCHING_USER,
-  FETCHED_USER,
-  REQUESTED_PASSCODE,
+  AUTHENTICATE,
+  FETCH,
+  FETCH_SUCCESS,
+  REQUEST_PASSCODE_SUCCESS,
 } from './actions';
 
 const initState = {
@@ -14,14 +14,14 @@ const initState = {
 const reducer = (state = initState, action) => {
   switch (action.type) {
 
-    case AUTHENTICATING_USER:
-    case FETCHING_USER:
+    case AUTHENTICATE:
+    case FETCH:
       return { ...state, loading: true };
 
-    case FETCHED_USER:
+    case FETCH_SUCCESS:
       return { ...state, loading: false, data: action.data.user };
 
-    case REQUESTED_PASSCODE:
+    case REQUEST_PASSCODE_SUCCESS:
       return { ...state, requestedPasscode: action.id };
 
     default:

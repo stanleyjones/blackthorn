@@ -30,13 +30,10 @@ CampaignShow.propTypes = {
   userId: PropTypes.string,
 };
 
-const mapStateToProps = (state, ownProps) => {
-  console.log(state);
-  return {
-    campaign: state.campaigns.data.find(campaign => campaign.id === ownProps.params.id) || {},
-    userId: state.user.data.id,
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  campaign: state.campaigns.data.find(campaign => campaign.id === ownProps.params.id) || {},
+  userId: state.user.data.id,
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchUser: () => dispatch(fetchUser()),

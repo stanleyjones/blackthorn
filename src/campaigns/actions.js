@@ -1,12 +1,12 @@
 import { queryGraph } from '../shared/helpers';
 
-export const EDIT_CAMPAIGN = 'EDIT_CAMPAIGN';
-export const DELETING_CAMPAIGN = 'DELETING_CAMPAIGN';
-export const DELETED_CAMPAIGN = 'DELETED_CAMPAIGN';
-export const DELETE_CAMPAIGN_FAILURE = 'DELETE_CAMPAIGN_FAILURE';
-export const SAVING_CAMPAIGN = 'SAVING_CAMPAIGN';
-export const SAVED_CAMPAIGN = 'SAVED_CAMPAIGN';
-export const SAVE_CAMPAIGN_FAILURE = 'SAVE_CAMPAIGN_FAILURE';
+export const EDIT = 'CAMPAIGN.EDIT';
+export const DELETE = 'CAMPAIGN.DELETE';
+export const DELETE_SUCCESS = 'CAMPAIGN.DELETE.SUCCESS';
+export const DELETE_FAILURE = 'CAMPAIGN.DELETE.FAILURE';
+export const SAVE = 'CAMPAIGN.SAVE';
+export const SAVE_SUCCESS = 'CAMPAIGN.SAVE.SUCCESS';
+export const SAVE_FAILURE = 'CAMPAIGN.SAVE.FAILURE';
 
 const defaultAttrs = {
   name: 'New Campaign',
@@ -14,11 +14,11 @@ const defaultAttrs = {
 
 export const editCampaign = (e, id) => {
   const { name, value } = e.target || e;
-  return { type: EDIT_CAMPAIGN, attrs: { [name]: value }, id };
+  return { type: EDIT, attrs: { [name]: value }, id };
 };
 
 export const saveCampaign = (userId, attrs) => async (dispatch) => {
-  dispatch({ type: SAVING_CAMPAIGN });
+  dispatch({ type: SAVE });
   const { id, name } = attrs;
   const redirect = id ? `/campaigns/${id}` : null;
   try {
@@ -31,14 +31,14 @@ export const saveCampaign = (userId, attrs) => async (dispatch) => {
         }) { id: _id, name }
       }
     `);
-    return dispatch({ type: SAVED_CAMPAIGN, data, redirect });
+    return dispatch({ type: SAVE_SUCCESS, data, redirect });
   } catch (err) {
-    return dispatch({ type: SAVE_CAMPAIGN_FAILURE, err });
+    return dispatch({ type: SAVE_FAILURE, err });
   }
 };
 
 export const deleteCampaign = (userId, id) => async (dispatch) => {
-  dispatch({ type: DELETING_CAMPAIGN });
+  dispatch({ type: DELETE });
   try {
     const { data } = await queryGraph(`
       mutation {
@@ -48,9 +48,9 @@ export const deleteCampaign = (userId, id) => async (dispatch) => {
         }) { id: _id, name }
       }
     `);
-    return dispatch({ type: DELETED_CAMPAIGN, data, redirect: '/campaigns' });
+    return dispatch({ type: DELETE_SUCCESS, data, redirect: '/campaigns' });
   } catch (err) {
-    return dispatch({ type: DELETE_CAMPAIGN_FAILURE, err });
+    return dispatch({ type: DELETE_FAILURE, err });
   }
 };
 

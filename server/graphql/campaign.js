@@ -18,15 +18,15 @@ export const removeCampaign = query => removeOne('campaigns', query);
 
 const Campaign = new GraphQLObjectType({
   name: 'Campaign',
-  fields: {
+  fields: () => ({
     _id: { type: GraphQLID },
     name: { type: GraphQLString },
-    // players: {
-    //   type: new GraphQLList(User),
-    //   resolve: ({ playerIds }) => findUsers({ _id: { $in: playerIds } }),
-    // },
+    players: {
+      type: new GraphQLList(User),
+      resolve: ({ playerIds }) => findUsers({ _id: { $in: playerIds } }),
+    },
     userId: { type: GraphQLID },
-  },
+  }),
 });
 
 export default Campaign;
