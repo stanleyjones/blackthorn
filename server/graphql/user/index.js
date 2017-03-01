@@ -94,21 +94,20 @@ export const auth = {
 export const inviteUser = {
   type: User,
   args: {
-    email: { type: GraphQLString },
     campaignId: { type: GraphQLID },
+    email: { type: GraphQLString },
   },
-  resolve: async (_, args) => {
-    const { campaignId, email } = args;
-    const user = await findUser({ email });
-    let { _id: userId } = user;
-    if (!userId) {
+  resolve: async (_, { campaignId, email }) => {
+    let user = await findUser({ email });
+    if (!user) {
       const { insertedId } = await insertUser({ email });
-      userId = insertedId;
+      user = await findUser({ _id: new ObjectId(insertedId) });
       sendInvite(email);
     }
-    if (campaignId && userId) {
-      const campaign = await findCampaign({ _id: new ObjectId(campaignId) });
-      updateCampaign(campaign, { playerIds: [...campaign.playerIds, userId] });
+    if (campaignId) {
+      const { _id: userId } = user;
+      const { playerIds = [] } = await findCampaign({ _id: new ObjectId(campaignId) });
+      updateCampaign({ _id: new ObjectId(campaignId) }, { playerIds: [...playerIds, userId] });
     }
     return user;
   },
