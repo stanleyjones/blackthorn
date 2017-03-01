@@ -23,7 +23,7 @@ const Campaign = new GraphQLObjectType({
     name: { type: GraphQLString },
     players: {
       type: new GraphQLList(User),
-      resolve: ({ playerIds }) => findUsers({ _id: { $in: playerIds } }),
+      resolve: ({ playerIds }) => findUsers({ _id: { $in: playerIds } }) || [],
     },
     userId: { type: GraphQLID },
   }),
@@ -53,7 +53,7 @@ export const saveCampaign = {
     if (_id) {
       updateCampaign({ _id: campaignId }, { ...attrs, userId });
     } else {
-      insertCampaign({ ...attrs, userId });
+      insertCampaign({ ...attrs, userId, playerIds: [] });
     }
     return findCampaigns({ userId });
   },

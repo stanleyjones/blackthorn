@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { sign, verify } from 'jsonwebtoken';
 
 import { SECRET } from '../../constants';
-import { sendPasscode } from '../../mailer';
+import { sendInvite, sendPasscode } from '../../mailer';
 
 import { findAll, findOne, insertOne, updateOne } from '../helpers';
 import Campaign, { findCampaign, findCampaigns, updateCampaign } from '../campaign';
@@ -98,17 +98,18 @@ export const inviteUser = {
     campaignId: { type: GraphQLID },
   },
   resolve: async (_, args) => {
-    console.log('args:', JSON.stringify(args));
     const { campaignId, email } = args;
-    let player = await findUser({ email });
-    console.log('old player:', JSON.stringify(player));
-    if (!player) { player = await insertUser({ email }); }
-    console.log('new player:', JSON.stringify(player));
-    if (campaignId && player._id) {
-      const { playerIds = [] } = await findCampaign({ _id: new ObjectId(campaignId) });
-      const campaign = await updateCampaign({ _id: new ObjectId(campaignId) }, { playerIds: [...playerIds, player._id] });
-      console.log('campaign:', JSON.stringify(campaign));
+    const user = await findUser({ email });
+    let { _id: userId } = user;
+    if (!userId) {
+      const { insertedId } = await insertUser({ email });
+      userId = insertedId;
+      sendInvite(email);
     }
-    return player;
+    if (campaignId && userId) {
+      const campaign = await findCampaign({ _id: new ObjectId(campaignId) });
+      updateCampaign(campaign, { playerIds: [...campaign.playerIds, userId] });
+    }
+    return user;
   },
 };
