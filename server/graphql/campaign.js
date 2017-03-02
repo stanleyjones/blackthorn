@@ -16,6 +16,12 @@ export const updateCampaign = (query, doc) => updateOne('campaigns', query, doc)
 export const insertCampaign = doc => insertOne('campaigns', doc);
 export const removeCampaign = query => removeOne('campaigns', query);
 
+const campaignDefaults = {
+  name: 'My New Campaign',
+  playerIds: [],
+  userId: null,
+};
+
 const Campaign = new GraphQLObjectType({
   name: 'Campaign',
   fields: () => ({
@@ -34,27 +40,32 @@ export default Campaign;
 const CampaignInput = new GraphQLInputObjectType({
   name: 'CampaignInput',
   fields: {
-    _id: { type: GraphQLID },
     name: { type: GraphQLString },
     playerIds: { type: new GraphQLList(GraphQLID) },
-    userId: { type: GraphQLID },
   },
 });
+
+export const createCampaign = {
+  type: new GraphQLList(Campaign),
+  args: {
+    userId: { type: GraphQLID },
+  },
+  resolve: async (_, args) => {
+    const userId = new ObjectId(args.userId);
+    await insertCampaign({ ...campaignDefaults, userId });
+    return findCampaigns({ userId });
+  },
+};
 
 export const saveCampaign = {
   type: new GraphQLList(Campaign),
   args: {
-    input: { type: CampaignInput },
+    campaignId: { type: GraphQLID },
+    attrs: { type: CampaignInput },
   },
-  resolve: async (_, args) => {
-    const { _id, ...attrs } = args.input;
-    const campaignId = new ObjectId(_id);
+  resolve: async (_, { campaignId, attrs }) => {
     const userId = new ObjectId(attrs.userId);
-    if (_id) {
-      updateCampaign({ _id: campaignId }, { ...attrs, userId });
-    } else {
-      insertCampaign({ ...attrs, userId, playerIds: [] });
-    }
+    await updateCampaign({ _id: new ObjectId(campaignId) }, attrs);
     return findCampaigns({ userId });
   },
 };
@@ -62,13 +73,12 @@ export const saveCampaign = {
 export const deleteCampaign = {
   type: new GraphQLList(Campaign),
   args: {
-    input: { type: CampaignInput },
+    campaignId: { type: GraphQLID },
   },
-  resolve: (_, args) => {
-    const { _id, ...attrs } = args.input;
-    const campaignId = new ObjectId(_id);
-    const userId = new ObjectId(attrs.userId);
-    removeCampaign({ _id: campaignId });
-    return findCampaigns({ userId });
+  resolve: async (_, { campaignId }) => {
+    const _id = new ObjectId(campaignId);
+    const campaign = await findCampaign({ _id });
+    await removeCampaign({ _id });
+    return findCampaigns({ userId: campaign.userId });
   },
 };

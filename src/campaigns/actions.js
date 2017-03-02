@@ -1,6 +1,9 @@
 import { queryGraph } from '../shared/helpers';
 
 export const EDIT = 'CAMPAIGN.EDIT';
+export const CREATE = 'CAMPAIGN.CREATE';
+export const CREATE_SUCCESS = 'CAMPAIGN.CREATE.SUCCESS';
+export const CREATE_FAILURE = 'CAMPAIGN.CREATE.FAILURE';
 export const DELETE = 'CAMPAIGN.DELETE';
 export const DELETE_SUCCESS = 'CAMPAIGN.DELETE.SUCCESS';
 export const DELETE_FAILURE = 'CAMPAIGN.DELETE.FAILURE';
@@ -8,44 +11,49 @@ export const SAVE = 'CAMPAIGN.SAVE';
 export const SAVE_SUCCESS = 'CAMPAIGN.SAVE.SUCCESS';
 export const SAVE_FAILURE = 'CAMPAIGN.SAVE.FAILURE';
 
-const defaultAttrs = {
-  name: 'New Campaign',
-};
-
 export const editCampaign = (e, id) => {
   const { name, value } = e.target || e;
   return { type: EDIT, attrs: { [name]: value }, id };
 };
 
-export const saveCampaign = (userId, attrs) => async (dispatch) => {
-  dispatch({ type: SAVE });
-  const { id, name } = attrs;
-  const redirect = id ? `/campaigns/${id}` : null;
+export const createCampaign = userId => async (dispatch) => {
+  dispatch({ type: CREATE });
   try {
     const { data } = await queryGraph(`
       mutation {
-        campaigns: saveCampaign(input: {
-          ${id ? `_id: "${id}"` : ''}
-          name: "${name}",
-          userId: "${userId}",
-        }) { id: _id, name }
+        campaigns: createCampaign(userId: "${userId}") { id: _id, name }
       }
     `);
-    return dispatch({ type: SAVE_SUCCESS, data, redirect });
+    return dispatch({ type: CREATE_SUCCESS, data });
+  } catch (err) {
+    return dispatch({ type: CREATE_FAILURE, err });
+  }
+};
+
+export const saveCampaign = attrs => async (dispatch) => {
+  dispatch({ type: SAVE });
+  const { id, name } = attrs;
+  try {
+    const { data } = await queryGraph(`
+      mutation {
+        campaigns: saveCampaign(
+          campaignId: "${id}",
+          attrs: { name: "${name}" }
+        ) { id: _id, name }
+      }
+    `);
+    return dispatch({ type: SAVE_SUCCESS, data, redirect: `/campaigns/${id}` });
   } catch (err) {
     return dispatch({ type: SAVE_FAILURE, err });
   }
 };
 
-export const deleteCampaign = (userId, id) => async (dispatch) => {
+export const deleteCampaign = campaignId => async (dispatch) => {
   dispatch({ type: DELETE });
   try {
     const { data } = await queryGraph(`
       mutation {
-        campaigns: deleteCampaign(input: {
-          _id: "${id}",
-          userId: "${userId}",
-        }) { id: _id, name }
+        campaigns: deleteCampaign(campaignId: "${campaignId}") { id: _id, name }
       }
     `);
     return dispatch({ type: DELETE_SUCCESS, data, redirect: '/campaigns' });
@@ -53,5 +61,3 @@ export const deleteCampaign = (userId, id) => async (dispatch) => {
     return dispatch({ type: DELETE_FAILURE, err });
   }
 };
-
-export const newCampaign = userId => saveCampaign(userId, defaultAttrs);

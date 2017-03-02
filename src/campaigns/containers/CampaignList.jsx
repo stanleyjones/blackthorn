@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { newCampaign } from '../actions';
+import { createCampaign } from '../actions';
 import { fetchUser } from '../../user/actions';
 
 class CampaignList extends Component {
@@ -11,16 +11,17 @@ class CampaignList extends Component {
   }
 
   render() {
+    const { campaigns, createCampaign, userId } = this.props;
     return (
       <div>
         <ul>
-          {this.props.campaigns.map((campaign, index) => (
+          {campaigns.map((campaign, index) => (
             <li key={index}>
               <Link to={`/campaigns/${campaign.id}`}>{campaign.name}</Link>
             </li>
           ))}
         </ul>
-        <button onClick={this.props.newCampaign(this.props.userId)}>New Campaign</button>
+        <button onClick={createCampaign(userId)}>New Campaign</button>
       </div>
     );
   }
@@ -29,7 +30,7 @@ class CampaignList extends Component {
 CampaignList.propTypes = {
   campaigns: PropTypes.array,
   fetchUser: PropTypes.func,
-  newCampaign: PropTypes.func,
+  createCampaign: PropTypes.func,
   userId: PropTypes.string,
 };
 
@@ -40,7 +41,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchUser: () => dispatch(fetchUser()),
-  newCampaign: userId => () => dispatch(newCampaign(userId)),
+  createCampaign: userId => () => dispatch(createCampaign(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampaignList);

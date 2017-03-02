@@ -1,10 +1,11 @@
 import { FETCH as FETCH_USER, FETCH_SUCCESS as FETCH_USER_SUCCESS } from '../user/actions';
 
 import {
+  CREATE,
+  CREATE_SUCCESS,
   DELETE,
   DELETE_SUCCESS,
   EDIT,
-  NEW,
   SAVE_SUCCESS,
   SAVE,
 } from './actions';
@@ -27,9 +28,7 @@ const reducer = (state = initState, action) => {
       return { ...state, data: campaigns };
     }
 
-    case NEW:
-      return { ...state, data: [...state.data, { name: 'New Campaign' }] };
-
+    case CREATE:
     case DELETE:
     case FETCH_USER:
     case SAVE:
@@ -38,6 +37,7 @@ const reducer = (state = initState, action) => {
     case FETCH_USER_SUCCESS:
       return { ...state, loading: false, data: action.data.user.campaigns };
 
+    case CREATE_SUCCESS:
     case DELETE_SUCCESS:
     case SAVE_SUCCESS:
       return { ...state, loading: false, data: action.data.campaigns };
