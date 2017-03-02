@@ -32,6 +32,14 @@ const Character = new GraphQLObjectType({
 
 export default Character;
 
+export const queryCharacter = {
+  type: Character,
+  args: {
+    characterId: { type: GraphQLID },
+  },
+  resolve: (_, { characterId }) => findOne({ _id: id(characterId) }),
+};
+
 const CharacterInput = new GraphQLInputObjectType({
   name: 'CharacterInput',
   fields: {

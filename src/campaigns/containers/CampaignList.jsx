@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+
+import { List } from 'shared/components';
+import { fetchUser } from 'user/actions';
 
 import { createCampaign } from '../actions';
-import { fetchUser } from '../../user/actions';
 
 class CampaignList extends Component {
   componentDidMount() {
@@ -14,13 +15,7 @@ class CampaignList extends Component {
     const { campaigns, createCampaign, userId } = this.props;
     return (
       <div>
-        <ul>
-          {campaigns.map((campaign, index) => (
-            <li key={index}>
-              <Link to={`/campaigns/${campaign.id}`}>{campaign.name}</Link>
-            </li>
-          ))}
-        </ul>
+        <List items={campaigns} label="Campaigns" path="/campaigns"/>
         <button onClick={createCampaign(userId)}>New Campaign</button>
       </div>
     );

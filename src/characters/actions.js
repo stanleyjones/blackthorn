@@ -7,6 +7,9 @@ export const CREATE_FAILURE = 'CHARACTER.CREATE.FAILURE';
 export const DELETE = 'CHARACTER.DELETE';
 export const DELETE_SUCCESS = 'CHARACTER.DELETE.SUCCESS';
 export const DELETE_FAILURE = 'CHARACTER.DELETE.FAILURE';
+export const FETCH = 'CHARACTER.FETCH';
+export const FETCH_SUCCESS = 'CHARACTER.FETCH.SUCCESS';
+export const FETCH_FAILURE = 'CHARACTER.FETCH.FAILURE';
 export const SAVE = 'CHARACTER.SAVE';
 export const SAVE_SUCCESS = 'CHARACTER.SAVE.SUCCESS';
 export const SAVE_FAILURE = 'CHARACTER.SAVE.FAILURE';
@@ -14,6 +17,24 @@ export const SAVE_FAILURE = 'CHARACTER.SAVE.FAILURE';
 export const editCharacter = (e, id) => {
   const { name, value } = e.target || e;
   return { type: EDIT, attrs: { [name]: value }, id };
+};
+
+export const fetchCharacter = characterId => async (dispatch) => {
+  dispatch({ type: FETCH });
+  try {
+    const { data: { character } } = await queryGraph(`
+      query {
+        character: queryCharacter(characterId: ${characterId}) {
+          description
+          id
+          name
+        }
+      }
+    `);
+    return dispatch({ type: FETCH_SUCCESS, character });
+  } catch (err) {
+    return dispatch({ type: FETCH_FAILURE, err });
+  }
 };
 
 export const createCharacter = (campaignId, userId) => async (dispatch) => {
