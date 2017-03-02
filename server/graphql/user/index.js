@@ -7,6 +7,7 @@ import { sendInvite, sendPasscode } from '../../mailer';
 
 import { findAll, findOne, insertOne, updateOne } from '../helpers';
 import Campaign, { findCampaign, findCampaigns, updateCampaign } from '../campaign';
+import Character, { findMany as findCharacters } from '../character';
 
 export const findUsers = query => findAll('users', query);
 export const findUser = query => findOne('users', query);
@@ -21,6 +22,10 @@ const User = new GraphQLObjectType({
     campaigns: {
       type: new GraphQLList(Campaign),
       resolve: ({ _id }) => findCampaigns({ $or: [{ userId: _id }, { playerIds: _id }] }),
+    },
+    characters: {
+      type: new GraphQLList(Character),
+      resolve: ({ _id }) => findCharacters({ userId: _id }),
     },
     email: { type: GraphQLString },
     name: { type: GraphQLString },

@@ -3,6 +3,7 @@ import { Route, Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
 import { CampaignEdit, CampaignList, CampaignShow } from '../campaigns/containers';
+import { CharacterEdit, CharacterShow } from '../characters/containers';
 import UserLogin from '../user/containers/UserLogin';
 import { authenticate, restorePath } from '../user/helpers';
 
@@ -16,6 +17,8 @@ const App = ({ store }) => (
       <Route path="/campaigns" component={CampaignList} onEnter={authenticate} />
       <Route path="/campaigns/:id" component={CampaignShow} onEnter={authenticate} />
       <Route path="/campaigns/:id/edit" component={CampaignEdit} onEnter={authenticate} />
+      <Route path="/characters/:id" component={CharacterShow} onEnter={authenticate} />
+      <Route path="/characters/:id/edit" component={CharacterEdit} onEnter={authenticate} />
       <Route path="*" component={notFound} />
     </Router>
   </Provider>

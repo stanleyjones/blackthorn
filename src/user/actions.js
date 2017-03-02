@@ -22,7 +22,20 @@ export const fetchUser = () => async (dispatch) => {
       query {
         user: queryUser(token: "${getToken()}") {
           id: _id,
-          campaigns { id: _id, name, userId, players { id: _id, name, email } },
+          campaigns {
+            characters { id, name },
+            id: _id,
+            name,
+            players { id: _id, name, email },
+            userId,
+          },
+          characters {
+            id,
+            name,
+            description,
+            campaign { id: _id },
+            player { id: _id }
+          },
           name,
         }
       }

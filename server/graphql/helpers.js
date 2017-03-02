@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 import { connect } from '../mongodb';
 
 const promisify = operation => new Promise((resolve, reject) => {
@@ -6,6 +8,8 @@ const promisify = operation => new Promise((resolve, reject) => {
     operation(db, resolve, reject);
   });
 });
+
+export const id = idString => new ObjectId(idString);
 
 export const findAll = (collection, query) => promisify((db, resolve, reject) => {
   db.collection(collection)
@@ -51,4 +55,12 @@ export const removeOne = (collection, query) => promisify((db, resolve) => {
       db.close();
       resolve(result);
     });
+});
+
+export const makeMethods = collection => ({
+  findMany: query => findAll(collection, query),
+  findOne: query => findOne(collection, query),
+  updateOne: (query, doc) => updateOne(collection, query, doc),
+  insertOne: doc => insertOne(collection, doc),
+  removeOne: query => removeOne(collection, query),
 });
