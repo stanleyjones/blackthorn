@@ -6,6 +6,7 @@ const CharacterList = ({ characters }) => (
   <List
     items={characters}
     label="Characters"
+    path="/characters"
   />
 );
 

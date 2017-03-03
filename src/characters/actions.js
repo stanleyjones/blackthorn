@@ -48,7 +48,7 @@ export const createCharacter = (campaignId, userId) => async (dispatch) => {
         ) { id, name }
       }
     `);
-    return dispatch({ type: CREATE_SUCCESS, data });
+    return dispatch({ type: CREATE_SUCCESS, data, redirect: `/characters/${data.character.id}` });
   } catch (err) {
     return dispatch({ type: CREATE_FAILURE, err });
   }
@@ -62,7 +62,7 @@ export const saveCharacter = attrs => async (dispatch) => {
       mutation {
         characters: saveCharacter(
           characterId: "${id}",
-          attrs: { name: "${name}", description: "${description}" }
+          attrs: { name: "${name}", description: "${description ? description : ''}" }
         ) { id, name }
       }
     `);

@@ -17,16 +17,10 @@ class CampaignShow extends Component {
       <div>
         <h1>{campaign.name}</h1>
 
-        <br />
-
         <PlayerList players={campaign.players} />
-
-        <br />
 
         <CharacterList characters={characters} />
         <button onClick={createCharacter(campaign.id, userId)}>New Character</button>
-
-        <br />
 
         <Link to="/"><button>Back</button></Link>
         {userId === campaign.userId

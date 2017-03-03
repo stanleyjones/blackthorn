@@ -60,7 +60,8 @@ export const createCharacter = {
       campaignId: id(campaignId),
       userId: id(userId),
     });
-    return findOne({ userId: insertedId });
+    console.log(insertedId);
+    return findOne({ _id: insertedId });
   },
 };
 
