@@ -17,7 +17,7 @@ export const sendPasscode = (email, passcode) => {
   };
 
   console.log(`Sending passcode (${passcode}) to ${email}`);
-  transport.sendMail(options, err => { if (err) { console.log(err); } });
+  // transport.sendMail(options, err => { if (err) { console.log(err); } });
 };
 
 
