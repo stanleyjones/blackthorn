@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { fetchUser } from 'user/actions';
-import { Loader } from 'shared/components';
+import { fetchUser } from '../../user/actions';
+import { Loader } from '../../shared/components';
 
 import { deleteCharacter, editCharacter, saveCharacter } from '../actions';
 

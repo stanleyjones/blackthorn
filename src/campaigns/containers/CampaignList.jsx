@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { List } from 'shared/components';
-import { fetchUser } from 'user/actions';
+import { List } from '../../shared/components';
+import { fetchUser } from '../../user/actions';
 
 import { createCampaign } from '../actions';
 
