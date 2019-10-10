@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 
 const RollSchema = new mongoose.Schema({
+	display: String,
+	private: Boolean,
 	resolution: [Number],
-	structure: [Number],
-	total: Number
+	total: Number,
 });
 
 RollSchema.pre('save', function (next) {
-	const [dice, mods] = this.structure;
+	const [dice, mods] = this.display.split('d').map(Number);
 	this.resolution = Array(dice).fill().map(die => Math.ceil(Math.random() * 6));
 	this.total = this.resolution.reduce((total, die) => total + die, mods);
 	next();

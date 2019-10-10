@@ -67,12 +67,10 @@ describe('User Routes', () => {
 
     test('POST /users/current should return a token', async () => {
     	const success = await req(app).post('/users/current')
-            .set('Authorization', `Bearer ${auth.createToken()}`)
             .send(mockUser);
     	expect(success.body).toHaveProperty('token');
 
     	const failure = await req(app).post('/users/current')
-            .set('Authorization', `Bearer ${auth.createToken()}`)
             .send({ ...mockUser, password: 'wrong' });
     	expect(failure.statusCode).toBe(403);
     });

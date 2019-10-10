@@ -1,28 +1,30 @@
 const WebSocket = require('ws');
 
 const auth = require('./lib/auth');
-const rolls = require('./rolls/resolver');
+const rolls = require('./rolls/controller');
+const { Connection } = require('./lib/messaging');
 
-const handleMessage = ws => async msg => {
-	const parsed = JSON.parse(msg);
-	switch (parsed.type) {
+const handleMessage = cxn => async msg => {
+	const { type, payload } = JSON.parse(msg);
+	switch (type) {
 		case 'roll':
-			const created = await rolls.create(parsed.payload);
-			const latestRolls = await rolls.getLatest();
-			ws.send(JSON.stringify({ type: 'rolls', payload: latestRolls }));
+			rolls.handleRoll(payload, cxn);
+			break;
+		case 'join':
+			cxn.broadcast('update');
 			break;
 		default:
-			ws.send(JSON.stringify({ type: 'unknown' }));
+			ws.send('unknown-type');
 	}
 }
 
 const createServer = (options = { noServer: true }) => {
 	const wss = new WebSocket.Server(options);
-
-	wss.on('connection', async function connection (ws, req) {
+	wss.on('connection', async (ws, req) => {
 		await auth.extractToken(req);
+		const cxn = new Connection(ws, req);
+		ws.on('message', handleMessage(cxn));
 		ws.on('ping', () => ws.pong());
-		ws.on('message', handleMessage(ws));
 	});
 
 	const upgrade = (req, socket, head) => {
